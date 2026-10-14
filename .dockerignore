@@ -1,0 +1,40 @@
+# Node modules
+node_modules
+npm-debug.log*
+
+# Build output
+dist
+build
+
+# Development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+MIGRATION.md
+MIGRATION_COMPLETE.md
+DEPLOYMENT.md
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Tests
+coverage
+.nyc_output
