@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /private/
-Disallow: /tmp/
-Disallow: /admin/
+Allow: /
 
-Sitemap: https:///sitemap.xml
+Sitemap: https://mdaashir.github.io/sitemap.xml
