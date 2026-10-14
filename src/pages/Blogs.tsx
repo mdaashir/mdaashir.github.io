@@ -1,4 +1,4 @@
-import { formatDate, posts } from '../lib/blog';
+import { formatDate, posts } from '../lib/posts';
 
 export function Blogs() {
 	return (

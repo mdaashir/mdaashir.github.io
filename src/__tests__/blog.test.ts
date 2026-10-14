@@ -9,7 +9,7 @@ describe('blog loader', () => {
 			expect(post.slug).toBeTruthy();
 			expect(post.title).toBeTruthy();
 			expect(post.readingTime).toBeGreaterThan(0);
-			expect(post.html).toContain('<');
+			expect(getPost(post.slug)?.html).toContain('<');
 		}
 	});
 

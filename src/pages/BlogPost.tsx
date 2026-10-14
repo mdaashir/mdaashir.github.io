@@ -1,5 +1,6 @@
 import { useRoute } from 'preact-iso';
-import { formatDate, getPost, posts } from '../lib/blog';
+import { getPost } from '../lib/blog';
+import { formatDate, posts } from '../lib/posts';
 import { NotFound } from './_404';
 
 export function BlogPost() {
