@@ -19,7 +19,7 @@ export function Footer() {
 						GitHub
 					</a>
 					<a
-						href='https://mdaashir.tech/'
+						href='https://mdaashir.github.io/'
 						target='_blank'
 						rel='noreferrer'
 						className='text-muted transition-colors hover:text-foreground'>
