@@ -1,4 +1,4 @@
-import { getPost } from './blog';
+import { getPostMeta } from './posts';
 
 export interface HeadElement {
 	type: string;
@@ -48,7 +48,7 @@ export function getHead(url = '/'): Head {
 	let type = 'website';
 
 	if (!title && path.startsWith('/blogs/')) {
-		const post = getPost(path.slice('/blogs/'.length));
+		const post = getPostMeta(path.slice('/blogs/'.length));
 		if (post) {
 			title = `${post.title} — ${SITE_NAME}`;
 			description = post.excerpt;

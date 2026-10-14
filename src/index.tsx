@@ -3,6 +3,7 @@ import {
 	Router,
 	Route,
 	hydrate,
+	lazy,
 	prerender as ssr,
 	useLocation,
 } from 'preact-iso';
@@ -13,11 +14,14 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Work } from './pages/Work';
 import { About } from './pages/About';
-import { Blogs } from './pages/Blogs';
-import { BlogPost } from './pages/BlogPost';
 import { NotFound } from './pages/_404';
 import { getHead } from './lib/seo';
 import './style.css';
+
+const Blogs = lazy(() => import('./pages/Blogs').then((module) => module.Blogs));
+const BlogPost = lazy(() =>
+	import('./pages/BlogPost').then((module) => module.BlogPost)
+);
 
 function ScrollManager() {
 	const { url } = useLocation();
