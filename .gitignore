@@ -27,4 +27,6 @@ coverage
 # Environment files
 .env
 .env.*
-!.env.example
+
+# Design references and source assets (copied into public/ already)
+/macos-portfolio/

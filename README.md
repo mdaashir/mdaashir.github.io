@@ -1,41 +1,49 @@
-# Mohamed Aashir S - Portfolio
+# Mohamed Aashir S — macOS Portfolio
 
-A fast, accessible portfolio built with **Preact**, **Vite**, **TypeScript**, and **Tailwind CSS**. Every route is prerendered to static HTML for SEO, and the blog is authored in Markdown.
+An interactive portfolio that presents itself as a **macOS desktop**: a menu bar, desktop
+shortcuts and a dock, where each dock app opens a **draggable window** over the wallpaper.
 
 ![Preact](https://img.shields.io/badge/Preact-10-purple.svg)
 ![Vite](https://img.shields.io/badge/Vite-7-blue.svg)
-![Tailwind](https://img.shields.io/badge/Tailwind-3.4-blue.svg)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue.svg)
 
-## Features
+## How it works
 
-- **Prerendered SPA** — real HTML for every route (`/`, `/about`, `/work`, `/blogs`, each post, `404`) with client-side routing on top via `preact-iso`.
-- **Markdown blog** — posts live in `src/content/blog/*.md` and are compiled at build time into individual prerendered pages.
-- **Working contact form** — validated client-side and delivered through a hosted form endpoint (Web3Forms by default); no backend to run.
-- **Accessible navigation** — keyboard-friendly mobile menu, focus states, skip-friendly anchors, and reduced-motion support.
-- **Professional dark theme** — a single `#00df9a` accent with a defined surface/border/text token system.
-- **Generated SEO extras** — per-route `<title>`/`description`/Open Graph/canonical tags, `sitemap.xml`, and a `404.html` for GitHub Pages.
+- **Desktop shell** — menu bar (nav links, status icons, live clock, appearance toggle),
+  desktop shortcuts and a dock with hover tooltips.
+- **Eight draggable windows** — `finder` (projects), `safari` (articles), `photos` (gallery),
+  `contact`, `terminal` (skills), `resume` (PDF), plus `txtfile` and `imgfile` viewers opened
+  from the finder.
+- **Window manager** — one shared open/close/z-index model (`WindowProvider`); clicking a
+  window raises it, the red control animates it closed.
+- **Appearance** — light/dark persisted in `localStorage` under `theme`, applied before first
+  paint by an inline script so there is no flash.
+- **Motion** — GSAP drives the hero's per-letter variable-font-weight loop, window open/close
+  and window dragging (`Draggable`).
+- **Mobile** — below 40rem the desktop is replaced by a `MobileShell` with app tiles that open
+  full-screen panels.
+- **SEO** — `/` and `/404` are prerendered to static HTML, with per-route title, description,
+  Open Graph and canonical tags plus a generated `sitemap.xml` and `404.html`.
 
 ## Tech stack
 
-- **Preact** + **preact-iso** — 3 kB runtime with an isomorphic router and prerendering
-- **Vite 7** — build tooling and dev server
-- **TypeScript** — type safety across the app
-- **Tailwind CSS** — utility-first styling
-- **marked** — Markdown rendering for the blog
+- **Preact 10** + **preact-iso** — small runtime, isomorphic router, prerendering
+- **Vite 7** + **TypeScript 5**
+- **Tailwind CSS 4** — CSS-first `@theme` / `@utility`, no JS config
+- **GSAP** (+ `Draggable`) — loaded lazily, after first paint
+- **pdfjs-dist** — renders the résumé, loaded only when that window opens
 - **Vitest** + **@testing-library/preact** — tests
 
 ## Requirements
 
-- **Node.js 20.19+ or 22.12+** (required by Vite 7)
-- npm
+- **Node.js 20.19+ or 22.12+** (Vite 7)
 
 ## Getting started
 
 ```bash
 npm install
-cp .env.example .env   # then add your contact form key (see below)
-npm run dev            # http://localhost:5173
+npm run dev        # http://localhost:5173
 ```
 
 ### Scripts
@@ -50,85 +58,53 @@ npm run dev            # http://localhost:5173
 | `npm run typecheck`  | Run `tsc --noEmit`                 |
 | `npm run deploy`     | Build and publish to GitHub Pages  |
 
-## Contact form
+## Personalising the content
 
-The form posts to a hosted endpoint, so there is no server to maintain. It defaults to
-[Web3Forms](https://web3forms.com):
+**All copy is placeholder.** Everything that renders as content lives in `src/data/`:
 
-1. Create a free access key at https://web3forms.com
-2. Copy `.env.example` to `.env` and set the values:
+| File             | Contents                                     |
+| ---------------- | -------------------------------------------- |
+| `nav.ts`         | Menu-bar links and status icons              |
+| `dock.ts`        | Dock apps and their labels                   |
+| `locations.ts`   | The finder filesystem (projects, about, CV)  |
+| `blog.ts`        | Article cards for the safari window          |
+| `techstack.ts`   | Terminal skill groups                        |
+| `socials.ts`     | Contact tiles                                |
+| `gallery.ts`     | Photos sidebar + gallery                     |
+| `windows.ts`     | Window ids and the initial z-index           |
 
-   ```env
-   VITE_CONTACT_ENDPOINT=https://api.web3forms.com/submit
-   VITE_CONTACT_ACCESS_KEY=your-access-key-here
-   ```
-
-If the key is missing, the form still validates but shows a message pointing visitors to
-email instead of pretending to succeed. To use another provider, change
-`VITE_CONTACT_ENDPOINT` to their submit URL and adapt `src/lib/contact.ts`.
-
-For the GitHub Pages build, set `VITE_CONTACT_ENDPOINT` and `VITE_CONTACT_ACCESS_KEY` as
-repository **Variables** (Settings → Secrets and variables → Actions → Variables).
-
-## Blog
-
-Add a post by creating a Markdown file in `src/content/blog/`:
-
-```markdown
----
-title: My post title
-slug: my-post-title
-date: 2026-10-01
-excerpt: A short summary shown in the listing.
-tags: Preact, Performance
----
-
-Body content in Markdown.
-```
-
-The slug defaults to the filename if omitted. Posts are picked up automatically, sorted by
-date, and prerendered to `/blogs/<slug>` — the Vite config reads the same files to add them
-to `additionalPrerenderRoutes` and the sitemap.
+Swap those files for real content and nothing else needs to change. Images live in
+`public/images/`, `public/icons/` and the CV at `public/files/resume.pdf`.
 
 ## Project structure
 
 ```
-portfolio/
-├── public/                    # Static assets (icons, manifest, robots.txt)
-├── src/
-│   ├── components/            # NavBar, Hero, Footer, ProjectCard, FeaturedWork
-│   ├── content/blog/          # Markdown blog posts
-│   ├── data/projects.ts       # Typed project list for /work
-│   ├── lib/                   # blog loader, contact submit, SEO head helpers
-│   ├── pages/                 # Home, About, Work, Blogs, BlogPost, _404
-│   ├── __tests__/             # Vitest tests + setup
-│   ├── index.tsx              # App shell, routes, prerender entry
-│   └── style.css              # Tailwind layers + design tokens
-├── vite.config.ts             # Prerender routes, sitemap + 404.html generation
-├── vitest.config.ts           # Test configuration
-├── tailwind.config.js         # Design tokens
-├── Dockerfile / Dockerfile.dev
-├── docker-compose.yml
-└── .github/workflows/deploy.yml
+src/
+├── components/     # Desktop shell: Menubar, Welcome, DesktopIcons, Dock, Window*, MobileShell
+├── data/           # All content (see above)
+├── lib/            # window-context, theme, gsap loader, pdf renderer, seo
+├── windows/        # Finder, Safari, Photos, Contact, Terminal, Resume, TxtFile, ImgFile
+├── __tests__/      # Vitest suites + setup
+├── index.tsx       # App entry, routes, prerender export
+└── style.css       # Tailwind v4 theme, utilities and the macOS component layer
 ```
 
-## Routes
+## Performance
 
-| Route          | Page                                |
-| -------------- | ----------------------------------- |
-| `/`            | Home — hero, featured work, contact |
-| `/work`        | Full project list                   |
-| `/about`       | About and skills                    |
-| `/blogs`       | Blog listing                        |
-| `/blogs/:slug` | Individual post                     |
-| `*`            | 404                                 |
+The heavy dependencies are deliberately deferred — nothing below is in the initial payload:
+
+| Chunk                   | Size (gzip) | When it loads              |
+| ----------------------- | ----------- | -------------------------- |
+| Initial JS + CSS        | ~22 kB      | Immediately                |
+| GSAP core (+ Draggable) | ~41 kB      | After first paint          |
+| pdf.js + worker         | ~131 kB     | Only when the CV window opens |
 
 ## Deployment
 
-### GitHub Pages (automatic)
+### GitHub Pages (automatically)
 
-Pushing to `main` or `Migrate` runs tests, builds, and deploys `dist/` via GitHub Actions.
-Enable Pages with the "GitHub Actions" source in repository settings.
+Pushing to `main` or `Migrate` runs the tests, builds, and deploys `dist/` via GitHub Actions.
+Enable Pages with the **GitHub Actions** source in the repository settings.
 
 ### Manual
 
@@ -142,6 +118,13 @@ npm run deploy   # build + gh-pages -d dist
 docker compose up dev     # dev server on :5173
 docker compose up prod    # production on :80
 ```
+
+## Research notes
+
+The interaction model was reverse-engineered from a live reference site and the supplied
+design references. The evidence is recorded in [`REVERSE_ENGINEERING.md`](./REVERSE_ENGINEERING.md)
+(static analysis) and [`RUNTIME_AND_FIGMA_FINDINGS.md`](./RUNTIME_AND_FIGMA_FINDINGS.md)
+(runtime observation + the Figma design inventory).
 
 ## License
 

@@ -63,9 +63,6 @@ jobs:
 
       - name: Build application
         run: npm run build
-        env:
-          VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
-          VITE_CONTACT_ACCESS_KEY: ${{ vars.VITE_CONTACT_ACCESS_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
