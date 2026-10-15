@@ -68,4 +68,25 @@ Reproduce with the preview server running (`npm run build && npm run preview`, p
   narrower ("Aashir's Portfolio" vs "Adrian's Portfolio") and our items are `<button>`s with padding
   rather than inline `<p>` text. Purely cosmetic; the row still ends at the same place.
 - Desktop shortcut width is label-driven in the reference (160/130/122px because names wrap); ours are
-  short single words at ~64px.
+  short single words at ~64px — a content artefact, not a layout difference.
+
+## Second pass — typography, appearance and spacing
+
+1. **The display fonts were never loaded.** `--font-playwrite` and `--font-mono` referenced
+   *Playwrite US Trad* and *Roboto Mono*, but no stylesheet brought them in: a Google Fonts
+   `@import` inside `style.css` was **dropped by the CSS pipeline** (it does not survive Tailwind v4 /
+   Lightning CSS). Moved to `<link rel="preconnect">` + `<link rel="stylesheet">` in `index.html`,
+   which is also faster (no chained import).
+2. **The hero word now uses the design's script face.** It was `font-sf-display` italic; the Figma
+   spec calls for **Playwrite US Trad at 100px**, so the headline is `font-playwrite` at
+   `6.25rem`, with `whitespace-nowrap` — at the previous 128px the word was wide enough to push the
+   full stop onto its own line.
+3. **Default appearance is now dark.** The reference resolves to
+   `documentElement.classList.contains('dark') === true` with `localStorage.theme === null`, i.e. dark
+   is the default and the toggle is opt-out. Ours followed `prefers-color-scheme`, so a light-mode
+   browser produced a light desktop. Both `readTheme()` and the pre-paint inline script now default to
+   dark unless `theme === 'light'` is stored.
+4. **Menu-bar spacing matched.** The nav items had `0.15rem 0.5rem` padding, making each item ~65px
+   wide against the reference's 49px. Padding is now zero (the appearance toggle keeps a hit area via a
+   modifier class) and the brand→items and item→item gaps are `gap-5`, matching the reference's
+   `nav div { gap-5 }` / `nav ul { gap-5 }`.

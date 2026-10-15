@@ -3,14 +3,15 @@ export type Theme = 'light' | 'dark';
 export const THEME_KEY = 'theme';
 
 export function readTheme(): Theme {
-	if (typeof window === 'undefined') return 'light';
+	if (typeof window === 'undefined') return 'dark';
 	try {
 		const stored = window.localStorage.getItem(THEME_KEY);
 		if (stored === 'dark' || stored === 'light') return stored;
 	} catch {
 		/* storage unavailable */
 	}
-	return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	// The reference site defaults to the dark appearance.
+	return 'dark';
 }
 
 export function applyTheme(theme: Theme): void {

@@ -8,14 +8,18 @@
 		<meta name="color-scheme" content="light dark" />
 		<link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
 		<link rel="manifest" href="/manifest.json" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+		/>
 		<script>
 			// Apply the persisted appearance before first paint so there is no flash.
+			// Defaults to dark, matching the reference design.
 			try {
 				var stored = localStorage.getItem('theme');
-				var dark = stored
-					? stored === 'dark'
-					: matchMedia('(prefers-color-scheme: dark)').matches;
-				if (dark) document.documentElement.classList.add('dark');
+				if (stored !== 'light') document.documentElement.classList.add('dark');
 			} catch (e) {}
 		</script>
 		<title>Mohamed Aashir S</title>

@@ -37,10 +37,10 @@ export function Menubar() {
 
 	return (
 		<nav class='menubar' aria-label='Menu bar'>
-			<div class='flex items-center gap-2'>
+			<div class='flex items-center gap-5'>
 				<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
 				<span class='text-[0.9375rem] font-bold'>Aashir&rsquo;s Portfolio</span>
-				<ul class='ml-2 flex items-center gap-1'>
+				<ul class='flex items-center gap-5'>
 					{navLinks.map((link) => (
 						<li key={link.id}>
 							<button
@@ -69,7 +69,7 @@ export function Menubar() {
 				</ul>
 				<button
 					type='button'
-					class='menubar__item'
+					class='menubar__item menubar__item--icon'
 					aria-label='Toggle appearance'
 					aria-pressed={theme === 'dark'}
 					onClick={onToggleTheme}>

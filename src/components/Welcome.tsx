@@ -58,11 +58,12 @@ export function Welcome() {
 
 	return (
 		<section id='welcome' ref={ref} class='abs-center col-center px-6 text-center'>
-			<p class='text-3xl max-sm:text-2xl'>
+			<p class='whitespace-nowrap text-3xl max-sm:text-2xl'>
 				<Letters text={GREETING} className='font-sf' />
 			</p>
-			<h1 class='mt-2 text-9xl italic max-sm:text-7xl'>
-				<Letters text={HEADLINE} className='font-sf-display' />
+			{/* Figma: the hero word is 100px Playwrite US Trad. */}
+			<h1 class='mt-2 whitespace-nowrap text-[6.25rem] leading-[1.1] max-sm:text-7xl'>
+				<Letters text={HEADLINE} className='font-playwrite' />
 			</h1>
 		</section>
 	);

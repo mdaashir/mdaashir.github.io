@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { THEME_KEY, readTheme, saveTheme, toggleTheme } from '../lib/theme';
 
 describe('theme store', () => {
-	it('defaults to light when nothing is stored and the OS prefers light', () => {
+	it('defaults to dark when nothing is stored, matching the reference', () => {
 		window.localStorage.clear();
-		expect(readTheme()).toBe('light');
+		expect(readTheme()).toBe('dark');
 	});
 
 	it('reads a stored preference', () => {

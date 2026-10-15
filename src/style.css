@@ -131,12 +131,18 @@
 	}
 
 	.menubar__item {
-		padding: 0.15rem 0.5rem;
-		border-radius: 0.375rem;
+		padding: 0;
+		white-space: nowrap;
 	}
 
 	.menubar__item:hover {
 		text-decoration: underline;
+	}
+
+	/** The appearance toggle is an icon button, so it keeps a hit area. */
+	.menubar__item--icon {
+		padding: 0.25rem;
+		border-radius: 0.375rem;
 	}
 
 	.menubar__item--active {
