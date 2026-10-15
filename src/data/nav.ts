@@ -15,16 +15,16 @@ export interface NavIcon {
 	label: string;
 }
 
+/** Menu-bar items, matching the reference's three entries. */
 export const navLinks: NavLink[] = [
 	{ id: 1, name: 'Projects', target: 'finder' },
-	{ id: 2, name: 'Articles', target: 'safari' },
-	{ id: 3, name: 'Contact', target: 'contact' },
-	{ id: 4, name: 'Resume', target: 'resume' },
+	{ id: 2, name: 'Contact', target: 'contact' },
+	{ id: 3, name: 'Resume', target: 'resume' },
 ];
 
+/** Status icons; the appearance toggle is rendered separately by the menu bar. */
 export const navIcons: NavIcon[] = [
 	{ id: 1, img: '/icons/wifi.svg', label: 'Wi-Fi' },
 	{ id: 2, img: '/icons/search.svg', label: 'Search' },
-	{ id: 3, img: '/icons/mode.svg', label: 'Appearance' },
-	{ id: 4, img: '/icons/user.svg', label: 'Account' },
+	{ id: 3, img: '/icons/user.svg', label: 'Account' },
 ];

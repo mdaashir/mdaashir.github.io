@@ -115,12 +115,12 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		padding: 0.25rem 1.25rem;
-		height: 2.25rem;
-		font-size: 0.8125rem;
+		padding: 0 1.25rem;
+		height: 3rem;
+		font-size: 0.875rem;
 		color: var(--color-label);
 		background-color: color-mix(in oklab, #fff 55%, transparent);
-		backdrop-filter: blur(24px) saturate(180%);
+		backdrop-filter: blur(64px) saturate(180%);
 		border-bottom: 1px solid var(--color-separator);
 	}
 
@@ -133,11 +133,10 @@
 	.menubar__item {
 		padding: 0.15rem 0.5rem;
 		border-radius: 0.375rem;
-		transition: background-color 0.15s ease;
 	}
 
 	.menubar__item:hover {
-		background-color: rgba(0, 0, 0, 0.08);
+		text-decoration: underline;
 	}
 
 	.menubar__item--active {
@@ -286,8 +285,25 @@
 	/* ---------- Finder ---------- */
 	.finder {
 		width: min(48rem, 92vw);
-		top: 5rem;
-		left: 10rem;
+		top: 4.75rem;
+		left: 9.5rem;
+	}
+
+	/** Only shown while inside a project folder, above the icon grid. */
+	.finder__back {
+		position: absolute;
+		top: 0.35rem;
+		left: 0.6rem;
+		font-size: 0.75rem;
+		color: var(--color-label-2);
+	}
+
+	.finder__back:hover {
+		color: var(--color-system-blue);
+	}
+
+	.dark .finder__back {
+		color: var(--color-dark-100);
 	}
 
 	.finder__body {
@@ -309,12 +325,14 @@
 	}
 
 	.sidebar__heading {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		color: var(--color-label-3);
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--color-label-2);
 		margin: 0.75rem 0.5rem 0.375rem;
+	}
+
+	.dark .sidebar__heading {
+		color: var(--color-dark-100);
 	}
 
 	.sidebar__item {
@@ -678,7 +696,7 @@
 	/* ---------- Desktop icons ---------- */
 	#desktop-icons {
 		position: absolute;
-		inset: 3rem 0 6rem 0;
+		inset: 3rem 0 0 0;
 	}
 
 	.desktop-icon {
@@ -687,18 +705,19 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		width: 6.5rem;
+		max-width: 10rem;
 	}
 
 	.desktop-icon img {
-		width: 3.5rem;
-		height: 3.5rem;
+		width: 3rem;
+		height: 3rem;
 		object-fit: contain;
 	}
 
 	.desktop-icon span {
-		font-size: 0.75rem;
-		line-height: 1rem;
+		font-size: 0.8125rem;
+		line-height: 1.125rem;
+		font-weight: 600;
 		text-align: center;
 		color: #fff;
 		padding: 0.05rem 0.3rem;

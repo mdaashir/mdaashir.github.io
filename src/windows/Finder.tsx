@@ -71,22 +71,31 @@ export function Finder() {
 						</li>
 					))}
 				</ul>
+
+				<p class='sidebar__heading'>{folder ? folder.name : location.name}</p>
+				<ul class='space-y-0.5'>
+					{children
+						.filter((node) => node.kind === 'folder')
+						.map((node) => (
+							<li key={`side-${node.id}-${node.name}`}>
+								<button
+									type='button'
+									class='sidebar__item'
+									onClick={() => setFolder(node as FolderNode)}>
+									<img src={node.icon} alt='' />
+									<span class='truncate'>{node.name}</span>
+								</button>
+							</li>
+						))}
+				</ul>
 			</aside>
 
 			<div class='finder__content'>
-				<div class='mb-4 flex items-center gap-2 text-xs text-label-2 dark:text-dark-100'>
-					<button
-						type='button'
-						class='rounded px-1 hover:bg-black/5 disabled:opacity-40'
-						disabled={!folder}
-						onClick={() => setFolder(null)}>
-						‹ Back
+				{folder && (
+					<button type='button' class='finder__back' onClick={() => setFolder(null)}>
+						‹ {location.name}
 					</button>
-					<span class='font-medium text-label dark:text-white'>
-						{folder ? folder.name : location.name}
-					</span>
-				</div>
-
+				)}
 				<ul>
 					{children.map((node) => (
 						<li key={`${node.kind}-${node.id}-${node.name}`}>

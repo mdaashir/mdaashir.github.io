@@ -4,6 +4,19 @@ import { navIcons, navLinks } from '../data/nav';
 import { applyTheme, readTheme, toggleTheme, type Theme } from '../lib/theme';
 import { useWindows } from '../lib/window-context';
 
+/** "Thu Oct 15 11:07 PM" — the reference's menu-bar clock format. */
+function formatClock(date: Date): string {
+	return date
+		.toLocaleString('en-US', {
+			weekday: 'short',
+			month: 'short',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: '2-digit',
+		})
+		.replace(/,/g, '');
+}
+
 export function Menubar() {
 	const { toggle } = useWindows();
 	const [theme, setTheme] = useState<Theme>('light');
@@ -14,11 +27,7 @@ export function Menubar() {
 		setTheme(initial);
 		applyTheme(initial);
 
-		const tick = () => {
-			setClock(
-				new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
-			);
-		};
+		const tick = () => setClock(formatClock(new Date()));
 		tick();
 		const timer = window.setInterval(tick, 30_000);
 		return () => window.clearInterval(timer);
@@ -28,10 +37,10 @@ export function Menubar() {
 
 	return (
 		<nav class='menubar' aria-label='Menu bar'>
-			<div class='flex items-center gap-1'>
+			<div class='flex items-center gap-2'>
 				<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
-				<span class='font-semibold'>Aashir&rsquo;s Portfolio</span>
-				<ul class='ml-3 flex items-center gap-0.5'>
+				<span class='text-[0.9375rem] font-bold'>Aashir&rsquo;s Portfolio</span>
+				<ul class='ml-2 flex items-center gap-1'>
 					{navLinks.map((link) => (
 						<li key={link.id}>
 							<button
@@ -50,8 +59,8 @@ export function Menubar() {
 				</ul>
 			</div>
 
-			<div class='flex items-center gap-2'>
-				<ul class='flex items-center gap-1'>
+			<div class='flex items-center gap-3'>
+				<ul class='flex items-center gap-2'>
 					{navIcons.map((icon) => (
 						<li key={icon.id}>
 							<img class='menubar__icon' src={icon.img} alt={icon.label} title={icon.label} />

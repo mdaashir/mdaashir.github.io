@@ -9,10 +9,20 @@ interface WindowProps {
 	id: WindowId;
 	title: string;
 	className: string;
+	/** The reference finder window shows no title, only a toolbar icon. */
+	showTitle?: boolean;
+	headerRight?: ComponentChildren;
 	children: ComponentChildren;
 }
 
-export function Window({ id, title, className, children }: WindowProps) {
+export function Window({
+	id,
+	title,
+	className,
+	showTitle = true,
+	headerRight,
+	children,
+}: WindowProps) {
 	const { windows, close, focus } = useWindows();
 	const state = windows[id];
 	const ref = useRef<HTMLElement>(null);
@@ -88,8 +98,8 @@ export function Window({ id, title, className, children }: WindowProps) {
 					<span class='minimize' aria-hidden='true' />
 					<span class='maximize' aria-hidden='true' />
 				</div>
-				<h2 class='window-title'>{title}</h2>
-				<span class='w-9' aria-hidden='true' />
+				{showTitle && <h2 class='window-title'>{title}</h2>}
+				<div class='flex h-6 w-9 items-center justify-end'>{headerRight}</div>
 			</header>
 			<div class='window-body'>{children}</div>
 		</section>

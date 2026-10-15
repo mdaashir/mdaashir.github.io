@@ -30,3 +30,6 @@ coverage
 
 # Design references and source assets (copied into public/ already)
 /macos-portfolio/
+
+# Browser-comparison captures and probe scripts
+/.screenshots/

@@ -16,7 +16,15 @@ export function WindowManager() {
 
 	return (
 		<>
-			<Window id='finder' title='Portfolio' className='finder'>
+			{/* The finder carries a toolbar icon instead of a centred title. */}
+			<Window
+				id='finder'
+				title='Portfolio'
+				className='finder'
+				showTitle={false}
+				headerRight={
+					<img src='/icons/search.svg' alt='' class='h-5 w-5 opacity-70 dark:invert' />
+				}>
 				<Finder />
 			</Window>
 			<Window id='safari' title='Articles' className='safari'>
