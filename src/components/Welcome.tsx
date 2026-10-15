@@ -1,0 +1,69 @@
+import { useEffect, useRef } from 'preact/hooks';
+
+import { loadGsap } from '../lib/gsap';
+
+const GREETING = "Hey, I'm Aashir!";
+const HEADLINE = 'portfolio.';
+
+function Letters({ text, className }: { text: string; className: string }) {
+	return (
+		<>
+			{[...text].map((char, index) => (
+				<span key={`${char}-${index}`} class={`hero-letter ${className}`} data-letter>
+					{char === ' ' ? '\u00a0' : char}
+				</span>
+			))}
+		</>
+	);
+}
+
+export function Welcome() {
+	const ref = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		const root = ref.current;
+		if (!root) return;
+
+		let tween: { kill: () => void } | null = null;
+		let cancelled = false;
+
+		loadGsap()
+			.then((gsap) => {
+				if (cancelled) return;
+				const letters = root.querySelectorAll<HTMLElement>('[data-letter]');
+				if (!letters.length) return;
+				tween = gsap.fromTo(
+					letters,
+					{ fontVariationSettings: '"wght" 120', y: 6, autoAlpha: 0.5 },
+					{
+						fontVariationSettings: '"wght" 420',
+						y: 0,
+						autoAlpha: 1,
+						duration: 1.1,
+						ease: 'power2.out',
+						stagger: { each: 0.03, from: 'start' },
+						repeat: -1,
+						repeatDelay: 2.4,
+						yoyo: true,
+					}
+				);
+			})
+			.catch(() => undefined);
+
+		return () => {
+			cancelled = true;
+			tween?.kill();
+		};
+	}, []);
+
+	return (
+		<section id='welcome' ref={ref} class='abs-center col-center px-6 text-center'>
+			<p class='text-3xl max-sm:text-2xl'>
+				<Letters text={GREETING} className='font-sf' />
+			</p>
+			<h1 class='mt-2 text-9xl italic max-sm:text-7xl'>
+				<Letters text={HEADLINE} className='font-sf-display' />
+			</h1>
+		</section>
+	);
+}

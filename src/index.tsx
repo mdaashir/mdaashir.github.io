@@ -1,62 +1,36 @@
-import {
-	LocationProvider,
-	Router,
-	Route,
-	hydrate,
-	lazy,
-	prerender as ssr,
-	useLocation,
-} from 'preact-iso';
-import { useEffect } from 'preact/hooks';
+import { LocationProvider, Route, Router, hydrate, prerender as ssr } from 'preact-iso';
 
-import { NavBar } from './components/NavBar';
-import { Footer } from './components/Footer';
-import { Home } from './pages/Home';
-import { Work } from './pages/Work';
-import { About } from './pages/About';
-import { NotFound } from './pages/_404';
+import { Desktop } from './components/Desktop';
+import { WindowProvider } from './lib/window-context';
 import { getHead } from './lib/seo';
 import './style.css';
 
-const Blogs = lazy(() => import('./pages/Blogs').then((module) => module.Blogs));
-const BlogPost = lazy(() =>
-	import('./pages/BlogPost').then((module) => module.BlogPost)
-);
-
-function ScrollManager() {
-	const { url } = useLocation();
-
-	useEffect(() => {
-		const hashIndex = url.indexOf('#');
-		if (hashIndex !== -1) {
-			const target = document.getElementById(url.slice(hashIndex + 1));
-			if (target) {
-				target.scrollIntoView({ behavior: 'smooth' });
-				return;
-			}
-		}
-		window.scrollTo(0, 0);
-	}, [url]);
-
-	return null;
+function NotFound() {
+	return (
+		<>
+			<Desktop />
+			<div class='abs-center col-center gap-2 rounded-xl bg-label/80 px-8 py-6 text-center text-white shadow-2xl backdrop-blur'>
+				<h1 class='text-xl font-semibold'>Page not found</h1>
+				<p class='text-sm opacity-80'>That route doesn&rsquo;t exist on this desktop.</p>
+				<a class='mt-1 text-sm text-system-blue underline' href='/'>
+					Back to the desktop
+				</a>
+			</div>
+		</>
+	);
 }
 
 export function App() {
 	return (
 		<LocationProvider>
-			<NavBar />
-			<main id='main'>
-				<Router>
-					<Route path='/' component={Home} />
-					<Route path='/work' component={Work} />
-					<Route path='/about' component={About} />
-					<Route path='/blogs' component={Blogs} />
-					<Route path='/blogs/:slug' component={BlogPost} />
-					<Route default component={NotFound} />
-				</Router>
-			</main>
-			<Footer />
-			<ScrollManager />
+			<WindowProvider>
+				<main>
+					<Router>
+						<Route path='/' component={Desktop} />
+						<Route default component={NotFound} />
+					</Router>
+				</main>
+			</WindowProvider>
 		</LocationProvider>
 	);
 }

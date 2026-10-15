@@ -1,5 +1,3 @@
-import { getPostMeta } from './posts';
-
 export interface HeadElement {
 	type: string;
 	props: Record<string, string>;
@@ -12,71 +10,30 @@ export interface Head {
 
 const SITE_NAME = 'Mohamed Aashir S';
 const SITE_URL = 'https://mdaashir.github.io';
-const THEME_COLOR = '#00df9a';
+const THEME_COLOR = '#000000';
 
-const PAGES: Record<string, { title: string; description: string }> = {
-	'/': {
-		title: `${SITE_NAME} — Full-Stack Developer`,
-		description:
-			'Portfolio of Mohamed Aashir S, a full-stack developer building clean, reliable web and mobile applications.',
-	},
-	'/about': {
-		title: `About — ${SITE_NAME}`,
-		description:
-			'Background, skills, and the tools I use to build web and mobile products.',
-	},
-	'/work': {
-		title: `Work — ${SITE_NAME}`,
-		description: 'Selected projects and products I have designed and built.',
-	},
-	'/blogs': {
-		title: `Blog — ${SITE_NAME}`,
-		description:
-			'Thoughts and notes on software, tooling, and building things for the web.',
-	},
-};
-
-function normalize(url: string): string {
-	const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '');
-	return path || '/';
-}
+const DESCRIPTION =
+	'An interactive macOS-style portfolio for Mohamed Aashir S — browse projects, articles, gallery and skills through a draggable desktop interface.';
 
 export function getHead(url = '/'): Head {
-	const path = normalize(url);
-	let title = PAGES[path]?.title;
-	let description = PAGES[path]?.description;
-	let type = 'website';
-
-	if (!title && path.startsWith('/blogs/')) {
-		const post = getPostMeta(path.slice('/blogs/'.length));
-		if (post) {
-			title = `${post.title} — ${SITE_NAME}`;
-			description = post.excerpt;
-			type = 'article';
-		}
-	}
-
-	if (!title) {
-		title = `Page not found — ${SITE_NAME}`;
-		description = 'The page you were looking for could not be found.';
-	}
-
-	const canonical = `${SITE_URL}${path}`;
+	const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+	const isHome = path === '/';
+	const title = isHome ? `${SITE_NAME} — macOS Portfolio` : `Page not found — ${SITE_NAME}`;
+	const description = isHome
+		? DESCRIPTION
+		: 'The page you were looking for could not be found.';
 
 	return {
 		title,
 		elements: [
-			{ type: 'meta', props: { name: 'description', content: description ?? '' } },
+			{ type: 'meta', props: { name: 'description', content: description } },
 			{ type: 'meta', props: { name: 'theme-color', content: THEME_COLOR } },
-			{ type: 'meta', props: { property: 'og:type', content: type } },
+			{ type: 'meta', props: { property: 'og:type', content: 'website' } },
 			{ type: 'meta', props: { property: 'og:title', content: title } },
-			{
-				type: 'meta',
-				props: { property: 'og:description', content: description ?? '' },
-			},
-			{ type: 'meta', props: { property: 'og:url', content: canonical } },
+			{ type: 'meta', props: { property: 'og:description', content: description } },
+			{ type: 'meta', props: { property: 'og:url', content: `${SITE_URL}${path}` } },
 			{ type: 'meta', props: { name: 'twitter:card', content: 'summary_large_image' } },
-			{ type: 'link', props: { rel: 'canonical', href: canonical } },
+			{ type: 'link', props: { rel: 'canonical', href: `${SITE_URL}${path}` } },
 		],
 	};
 }
