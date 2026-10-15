@@ -1,6 +1,7 @@
 {
-	"short_name": "Mohamed Aashir S",
-	"name": "Mohamed Aashir S - Portfolio",
+	"short_name": "mdaashir",
+	"name": "Mohamed Aashir S — Portfolio",
+	"description": "An interactive macOS-style portfolio of Mohamed Aashir S.",
 	"icons": [
 		{
 			"src": "favicon.ico",
@@ -31,6 +32,6 @@
 	"start_url": ".",
 	"scope": "/",
 	"display": "standalone",
-	"theme_color": "#00df9a",
-	"background_color": "#08090a"
+	"theme_color": "#007aff",
+	"background_color": "#0b0b0c"
 }
