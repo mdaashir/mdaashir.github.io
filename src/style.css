@@ -67,6 +67,15 @@
 }
 
 @layer base {
+	/*
+	 * The single scale lever for large screens. Every shell dimension is expressed in rem, so
+	 * growing the root font-size grows the menu bar, windows, dock, hero and icons together.
+	 * Below 1920px the `vw` term is smaller than the 16px floor, so nothing changes there.
+	 */
+	html {
+		font-size: clamp(16px, 0.833vw, 24px);
+	}
+
 	html,
 	body {
 		width: 100dvw;
@@ -92,6 +101,12 @@
 	 */
 	:root {
 		color-scheme: light;
+		/*
+		 * How much height a window body may use. Derived from the worst case: the viewport minus
+		 * the menu bar (3rem), the dock and its margin (6rem) and the tallest window offset (8rem),
+		 * so no window can ever run underneath the dock on a short viewport.
+		 */
+		--window-body-max: calc(100dvh - 17rem);
 	}
 
 	.dark {
@@ -229,13 +244,6 @@
 		transition: transform 0.15s ease;
 	}
 
-	@media (width >= 1920px) {
-		.dock-icon {
-			width: 5rem;
-			height: 5rem;
-		}
-	}
-
 	.dock-icon img {
 		width: 100%;
 		height: 100%;
@@ -320,6 +328,12 @@
 		color: #fff;
 	}
 
+	/* Vertical fit: content scrolls inside the window instead of being cut off by the dock. */
+	.window-body {
+		max-height: var(--window-body-max);
+		overflow: auto;
+	}
+
 	/* ---------- Finder ---------- */
 	.finder {
 		width: min(48rem, 92vw);
@@ -346,8 +360,8 @@
 
 	.finder__body {
 		display: flex;
-		/** Matches the reference's 390px window, keeping the dock clear. */
-		height: 22rem;
+		/** Matches the reference's 390px window, but yields on a short viewport. */
+		height: min(22rem, var(--window-body-max));
 	}
 
 	.sidebar {
@@ -509,7 +523,7 @@
 
 	.safari__body {
 		padding: 2rem;
-		max-height: 30rem;
+		max-height: min(30rem, var(--window-body-max));
 		overflow-y: auto;
 	}
 
@@ -679,7 +693,7 @@
 	}
 
 	.resume__body {
-		max-height: 70vh;
+		max-height: var(--window-body-max);
 		overflow-y: auto;
 		background-color: #525659;
 		color: #fff;
@@ -707,7 +721,7 @@
 		font-size: 0.8125rem;
 		line-height: 1.5;
 		color: var(--color-label-2);
-		max-height: 60vh;
+		max-height: min(60vh, var(--window-body-max));
 		overflow-y: auto;
 	}
 
@@ -741,7 +755,7 @@
 
 	.imgfile__body img {
 		width: 100%;
-		max-height: 70vh;
+		max-height: min(70vh, var(--window-body-max));
 		object-fit: contain;
 	}
 
@@ -781,34 +795,219 @@
 		background-color: var(--color-system-blue);
 	}
 
-	/* ---------- Mobile ---------- */
-	@media (width < 40rem) {
-		#dock,
-		#desktop-icons,
-		.menubar,
-		.finder,
-		.terminal,
-		.safari,
-		.contact,
-		.photos,
-		.resume,
-		.txtfile,
-		.imgfile {
-			display: none;
-		}
+	/* ---------- Device modes ---------- */
+	.desktop-shell {
+		position: absolute;
+		inset: 0;
 	}
 
-	.mobile-shell {
+	.phone-shell {
 		display: none;
 	}
 
-	@media (width < 40rem) {
-		.mobile-shell {
-			display: block;
-			padding: 1rem;
-			height: 100dvh;
-			overflow-y: auto;
+	/*
+	 * Phone mode. Narrow screens get it, and so do landscape phones: a width-only breakpoint would
+	 * hand an 844x390 phone the macOS desktop, which neither reference handles well.
+	 */
+	@media (width < 40rem), (height < 30rem) and (pointer: coarse) {
+		.desktop-shell {
+			display: none;
+		}
+
+		.phone-shell {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			flex-direction: column;
 			color: #fff;
+		}
+	}
+
+	/* ---------- Phone shell: iOS home screen ---------- */
+	/* Figma's mobile frames: status bar, wrapping app grid, translucent bottom bar. */
+	.phone__status {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: space-between;
+		padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1.5rem 0.25rem;
+		font-size: 0.9375rem;
+		font-weight: 600;
+	}
+
+	.phone__notch {
+		width: 6.25rem;
+		height: 1.625rem;
+		border-radius: 999px;
+		background-color: #000;
+	}
+
+	.phone__status-icons {
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+	}
+
+	.phone__status-icons img {
+		width: 1rem;
+		height: 1rem;
+		filter: brightness(0) invert(1);
+	}
+
+	.phone__home {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 0.75rem 1.25rem;
+		overflow-y: auto;
+		touch-action: pan-y;
+	}
+
+	/** Figma lays the app icons out as a wrapped row with a 19px gap. */
+	.phone__grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 19px;
+	}
+
+	.phone__app {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.375rem;
+		width: 4.5rem;
+	}
+
+	.phone__app img {
+		width: 3.75rem;
+		height: 3.75rem;
+	}
+
+	.phone__app span {
+		font-size: 0.6875rem;
+		text-align: center;
+	}
+
+	.phone__hero {
+		/** Sits in the middle of the free space between the icon grid and the bottom bar. */
+		margin: auto 0;
+		padding: 1.5rem 0;
+		text-align: center;
+	}
+
+	.phone__hero p {
+		font-size: 1.0625rem;
+	}
+
+	.phone__hero h1 {
+		font-size: clamp(2.5rem, 13vw, 3.5rem);
+		line-height: 1.15;
+	}
+
+	.phone__bar {
+		flex: none;
+		display: flex;
+		flex-direction: column;
+		padding: 0.5rem 0.75rem calc(env(safe-area-inset-bottom, 0px) + 0.4rem);
+		background-color: rgba(255, 255, 255, 0.7);
+		backdrop-filter: blur(25px) saturate(180%);
+		border-top: 1px solid rgba(0, 0, 0, 0.08);
+	}
+
+	.phone__tabs {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		gap: 0.25rem;
+	}
+
+	.phone__tab {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+		width: 3.75rem;
+		color: rgba(0, 0, 0, 0.75);
+	}
+
+	.phone__tab img {
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.phone__tab span {
+		font-size: 0.625rem;
+	}
+
+	.phone__home-indicator {
+		width: 8.5rem;
+		height: 0.3125rem;
+		margin: 0.3rem auto 0;
+		border-radius: 999px;
+		background-color: rgba(0, 0, 0, 0.85);
+	}
+
+	/* Full-screen app view, mirroring an opened iOS app. */
+	.phone__app-view {
+		position: absolute;
+		inset: 0;
+		z-index: 100000;
+		display: flex;
+		flex-direction: column;
+		padding-top: env(safe-area-inset-top, 0px);
+		background-color: var(--color-panel);
+		color: var(--color-label);
+	}
+
+	.dark .phone__app-view {
+		background-color: var(--color-dark-700);
+		color: #fff;
+	}
+
+	.phone__app-header {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid var(--color-separator);
+		font-size: 0.9375rem;
+		font-weight: 600;
+	}
+
+	.phone__app-close {
+		font-size: 0.875rem;
+		font-weight: 400;
+		color: var(--color-system-blue);
+	}
+
+	.phone__app-body {
+		flex: 1;
+		overflow: auto;
+	}
+
+	/* The desktop components need a little help filling a phone screen. */
+	.phone__app-body .finder__body {
+		height: 100%;
+	}
+
+	.phone__app-body .sidebar {
+		width: 8.5rem;
+	}
+
+	.phone__app-body .finder__content {
+		padding: 1.25rem;
+	}
+
+	/* ---------- Hover-only affordances ---------- */
+	@media (hover: none) {
+		.dock-icon {
+			transition: none;
+		}
+
+		[role='tooltip'] {
+			display: none;
 		}
 	}
 

@@ -198,3 +198,34 @@ padded button, so the nav shifts slightly right of the reference's unpadded, und
 arrow override had to be explicit because a global `button { cursor: pointer }` was winning. The dock
 and sidebar keep the hand, matching the reference. This is a deliberate divergence in favour of macOS
 behaviour over reference fidelity.
+
+## Sixth pass — every device class
+
+Measured both references across the viewport matrix before changing anything.
+
+**The two references agree on the phone.** The reference site hides its nav and desktop icons below
+**640px** and swaps in a taller bottom bar; the Figma file has no tablet frames at all, only 8 mobile
+frames at **402×874**, each an iOS home screen — status bar (54px), a wrapping app-icon grid (19px
+gap) and a translucent bottom tab bar with a home indicator. Our breakpoint was already 640px, which
+happens to match.
+
+**What we shipped.** The phone layout is now that iOS home screen, built from the same `content/`
+sections, so disabled apps leave the home screen and the bottom bar too. The Figma tab bar's labels
+("Reading Now", "Library", "Audiobooks") are the Figma kit's placeholders, not portfolio content, so
+the bar uses our dock sections instead.
+
+**Measured bugs this fixed** (all on the previous build):
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `scrollWidth` 394 at a 390px viewport | The desktop hero was missing from the mobile hide list | The whole desktop is one `.desktop-shell` wrapper, hidden as a unit |
+| Open windows floated over the phone shell | `Window.tsx` sets `display` **inline**, so the per-window `display: none` in the media query never applied | Same wrapper fix |
+| Safari reached y=544 past the dock top at 504 on a 600px-tall viewport | Fixed `max-height: 30rem` on the body | `--window-body-max: calc(100dvh - 17rem)` caps every window body |
+| 14px menu text and a 467px hero on a 2560 display | Only the dock had a large-screen rule | `html { font-size: clamp(16px, 0.833vw, 24px) }` scales all rem together |
+
+**Deliberate divergences.** Landscape phones (`< 30rem` tall, coarse pointer) take the phone layout —
+at 844×390 the reference's hero clears its dock by only 5px, so its desktop is cramped rather than
+designed, and it has no rule for this. And where the reference keeps windows a fixed size at every
+width (only its dock grows), ours scales with the root font-size; fidelity loses to being readable
+from a couch.
+

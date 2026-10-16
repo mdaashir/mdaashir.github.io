@@ -56,7 +56,6 @@ export interface SiteConfig {
 	themeColor: string;
 	theme: { default: 'light' | 'dark' };
 	favicon: string;
-	mobile: { badge?: string };
 	ui: {
 		emptyFolder: string;
 		noFileSelected: string;

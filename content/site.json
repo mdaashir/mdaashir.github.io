@@ -11,7 +11,6 @@
 	"themeColor": "#000000",
 	"theme": { "default": "dark" },
 	"favicon": "/favicon.ico",
-	"mobile": { "badge": "iOS" },
 	"ui": {
 		"emptyFolder": "This folder is empty.",
 		"noFileSelected": "No file selected.",

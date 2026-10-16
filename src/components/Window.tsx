@@ -31,32 +31,57 @@ export function Window({
 		const el = ref.current;
 		if (!state.isOpen || !el) return;
 
-		let instance: { kill: () => void } | null = null;
+		let instance: { kill: () => void; update: (applyBounds?: boolean) => void } | null = null;
+		let onResize: (() => void) | null = null;
 		let cancelled = false;
 
 		loadGsap()
-			.then((gsap) => {
-				if (cancelled || !ref.current) return;
+			.then(async (gsap) => {
+				if (cancelled || !ref.current) return null;
+
 				gsap.fromTo(
 					ref.current,
 					{ scale: 0.94, autoAlpha: 0 },
 					{ scale: 1, autoAlpha: 1, duration: 0.28, ease: 'power3.out' }
 				);
-				return loadDraggable();
+
+				const Draggable = await loadDraggable();
+				return Draggable ? { gsap, Draggable } : null;
 			})
-			.then((Draggable) => {
-				if (cancelled || !Draggable || !ref.current) return;
-				instance = Draggable.create(ref.current, {
+			.then((loaded) => {
+				const target = ref.current;
+				if (cancelled || !loaded || !target) return;
+
+				instance = loaded.Draggable.create(target, {
 					type: 'x,y',
-					trigger: ref.current.querySelector('.window-header'),
+					trigger: target.querySelector('.window-header'),
+					/** Stops a window being dragged right off the screen. */
+					bounds: document.body,
 					onPress: () => focus(id),
 					cursor: 'grabbing',
 				})[0];
+
+				// A shrinking viewport can strand a window, so pull it back into view.
+				onResize = () => {
+					const rect = target.getBoundingClientRect();
+					const viewport = { width: window.innerWidth, height: window.innerHeight };
+					const stranded =
+						rect.right < 60 ||
+						rect.left > viewport.width - 60 ||
+						rect.bottom < 60 ||
+						rect.top > viewport.height - 60;
+					if (!stranded) return;
+
+					loaded.gsap.set(target, { x: 0, y: 0 });
+					instance?.update(true);
+				};
+				window.addEventListener('resize', onResize);
 			})
 			.catch(() => undefined);
 
 		return () => {
 			cancelled = true;
+			if (onResize) window.removeEventListener('resize', onResize);
 			instance?.kill();
 		};
 	}, [state.isOpen, id, focus]);

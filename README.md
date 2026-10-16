@@ -88,7 +88,7 @@ content/            # Everything the site renders — edit this, not the code
 └── sections/       # One file per app; delete one and that app disappears
 
 src/
-├── components/     # Desktop shell: Menubar, Welcome, DesktopIcons, Dock, Window*, MobileShell
+├── components/     # Desktop shell: Menubar, Welcome, DesktopIcons, Dock, Window*, PhoneShell
 ├── content/        # Typed loader for content/: types, skip rules, finder derivation
 ├── lib/            # window store, theme, gsap loader, pdf renderer, seo, menus
 ├── windows/        # Finder, Safari, Photos, Contact, Terminal, Resume, TxtFile, ImgFile
@@ -96,6 +96,29 @@ src/
 ├── index.tsx       # App entry, routes, prerender export
 └── style.css       # Tailwind v4 theme, utilities and the macOS component layer
 ```
+
+## Devices and breakpoints
+
+Two layouts, switching at **640px** — the same breakpoint the reference site uses:
+
+| Class | Width | Layout |
+| --- | --- | --- |
+| Phone | `< 640px` | iOS home screen: status bar, wallpaper with the hero, app-icon grid, translucent bottom bar with a home indicator. Tapping an icon opens it full-screen. |
+| Tablet | `640–1919px` | The macOS desktop (touch-aware: long-press opens menus). |
+| Desktop / TV | `≥ 1920px` | The macOS desktop, scaled up. |
+
+- **Large-screen scaling is one lever.** `html { font-size: clamp(16px, 0.833vw, 24px) }`. Every shell
+  dimension is in `rem`, so the menu bar, windows, dock, hero and icons all grow together: 16px at
+  1920, ~21px at 2560, capped at 24px. Below 1920 nothing changes. Don't add px-based shell sizes —
+  they will not scale.
+- **Landscape phones take the phone layout** via
+  `@media (width < 40rem), (height < 30rem) and (pointer: coarse)`. A width-only test would hand an
+  844×390 phone the desktop, which neither reference handles well.
+- **Windows always clear the dock.** `--window-body-max` (defined in `style.css`) caps every window
+  body against the viewport, and dragged windows are clamped, so nothing is ever stranded under the
+  dock or off-screen on a short viewport.
+- **Touch**: long-press opens the same menus as right-click (see `src/lib/long-press.ts`), and
+  hover-only effects (dock magnification, tooltips) are disabled via `@media (hover: none)`.
 
 ## Performance
 
