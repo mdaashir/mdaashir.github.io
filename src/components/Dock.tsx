@@ -34,7 +34,7 @@ export function Dock() {
 							</button>
 							<span
 								role='tooltip'
-								class='pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-blue-200 px-3 py-1 text-xs text-blue-900 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'>
+								class='pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-blue-200 px-3 py-1 text-xs text-blue-900 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100'>
 								{app.name}
 							</span>
 						</li>

@@ -82,6 +82,21 @@
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		user-select: none;
+		color: var(--color-label);
+	}
+
+	/*
+	 * The appearance is class-driven, so pin the UA colour scheme to it. Without
+	 * this the browser's own `prefers-color-scheme: dark` makes the default root
+	 * colour white, which is invisible on the light theme's white panels.
+	 */
+	:root {
+		color-scheme: light;
+	}
+
+	.dark {
+		color-scheme: dark;
+		color: #fff;
 	}
 
 	main {
@@ -177,7 +192,8 @@
 		bottom: 1.25rem;
 		left: 50%;
 		transform: translateX(-50%);
-		z-index: 50;
+		/** Above the windows (which start at z-index 1000), as the Dock is in macOS. */
+		z-index: 9999;
 	}
 
 	.dock-container {
@@ -314,7 +330,8 @@
 
 	.finder__body {
 		display: flex;
-		height: 26rem;
+		/** Matches the reference's 390px window, keeping the dock clear. */
+		height: 22rem;
 	}
 
 	.sidebar {
@@ -470,6 +487,10 @@
 		color: var(--color-label-2);
 	}
 
+	.dark .safari__search {
+		color: var(--color-dark-100);
+	}
+
 	.safari__body {
 		padding: 2rem;
 		max-height: 30rem;
@@ -504,6 +525,10 @@
 	.article p {
 		font-size: 0.6875rem;
 		color: var(--color-label-2);
+	}
+
+	.dark .article p {
+		color: var(--color-dark-100);
 	}
 
 	.article a {
@@ -641,6 +666,7 @@
 		max-height: 70vh;
 		overflow-y: auto;
 		background-color: #525659;
+		color: #fff;
 		padding: 0.5rem;
 	}
 
@@ -667,6 +693,10 @@
 		color: var(--color-label-2);
 		max-height: 60vh;
 		overflow-y: auto;
+	}
+
+	.dark .txtfile__body {
+		color: var(--color-dark-100);
 	}
 
 	.txtfile__body h3 {

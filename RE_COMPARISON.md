@@ -90,3 +90,46 @@ Reproduce with the preview server running (`npm run build && npm run preview`, p
    wide against the reference's 49px. Padding is now zero (the appearance toggle keeps a hit area via a
    modifier class) and the brand→items and item→item gaps are `gap-5`, matching the reference's
    `nav div { gap-5 }` / `nav ul { gap-5 }`.
+
+## Third pass — the light theme was broken
+
+Reported as "light theme not visible". Reproduced in a real browser and diagnosed with computed-style
+probes rather than guesswork.
+
+**Root cause.** `index.html` declares `<meta name="color-scheme" content="light dark">`, and the test
+browser prefers dark. With that declaration Chromium derives the *default root text colour* from the
+preferred scheme, so `html` computed to `rgb(255, 255, 255)` even though **no stylesheet rule set a
+colour on `html`/`body`/`:root`** — a scan of every loaded stylesheet for such a rule returned `[]`.
+Because the base layer never set a colour, every panel inherited white. In dark mode that was
+invisible; the moment our `.dark` class was removed the windows turned white while their text stayed
+white, so the sidebar and finder labels disappeared.
+
+**Fix.** Set an explicit base colour and pin the UA colour scheme to our class-driven appearance:
+
+```css
+html, body { color: var(--color-label); }
+:root { color-scheme: light; }
+.dark { color-scheme: dark; color: #fff; }
+```
+
+Light mode now resolves to `rgba(0, 0, 0, 0.85)` on the white panels; dark mode to `#fff`.
+
+**Dark-mode gaps found while auditing.** Several components used light-only label colours with no
+override, so they were unreadable in dark mode: `.article p`, `.safari__search` and `.txtfile__body`
+gained `.dark` variants, and `.resume__body` now forces white text on its always-dark-grey background.
+
+**Two further defects found by clicking through it:**
+
+1. **The finder window covered the dock.** Ours was ~450px tall (a `26rem` body) against the
+   reference's 390px, so it overlapped the dock and made every dock icon unclickable — the browser
+   reported the clicks as "covered by `.finder__content`". Body height is now `22rem`, matching the
+   reference.
+2. **The dock sat *under* the windows.** `#dock` was `z-index: 50` while windows start at 1000, so an
+   open safari/gallery window swallowed the dock. Raised to `9999` — real macOS keeps the Dock above
+   windows. (The reference keeps it below; a deliberate, documented divergence.)
+3. Minor: the dock tooltip stuck open after a mouse click, because `group-focus-within` also matches a
+   button that was just clicked. Now `group-focus-visible`, so it appears on hover and keyboard focus
+   only.
+
+**Verification.** Computed-style probes in both themes plus screenshots of the light and dark desktop
+with the finder, terminal, contact, articles and gallery windows open.
