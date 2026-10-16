@@ -1,3 +1,4 @@
+import { useLocation } from 'preact-iso';
 import { useEffect, useState } from 'preact/hooks';
 
 import { Calendar } from './Calendar';
@@ -19,10 +20,17 @@ function formatClock(date: Date): string {
 }
 
 export function Menubar() {
-	const { toggle } = useWindows();
+	const { toggle, closeAll } = useWindows();
+	const { path, route } = useLocation();
 	const [theme, setTheme] = useState<Theme>('light');
 	const [clock, setClock] = useState('');
 	const [showCalendar, setShowCalendar] = useState(false);
+
+	/** The Apple logo and the brand name both clear the desktop. */
+	const closeAllWindows = () => {
+		closeAll();
+		if (path !== '/') route('/');
+	};
 
 	useEffect(() => {
 		const initial = readTheme();
@@ -40,10 +48,23 @@ export function Menubar() {
 	return (
 		<>
 			<nav class='menubar' aria-label='Menu bar'>
-				<div class='flex items-center gap-5'>
-					<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
-					<span class='text-[0.9375rem] font-bold'>Aashir&rsquo;s Portfolio</span>
-					<ul class='flex items-center gap-5'>
+				<div class='flex items-center gap-1'>
+					<button
+						type='button'
+						class='menubar__item'
+						aria-label='Close all windows'
+						title='Close all windows'
+						onClick={closeAllWindows}>
+						<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
+					</button>
+					<button
+						type='button'
+						class='menubar__item text-[0.9375rem] font-bold'
+						title='Close all windows'
+						onClick={closeAllWindows}>
+						Aashir&rsquo;s Portfolio
+					</button>
+					<ul class='ml-3 flex items-center gap-5'>
 						{navLinks.map((link) => (
 							<li key={link.id}>
 								<button

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/preact';
+import { LocationProvider } from 'preact-iso';
+import { fireEvent, render, screen, within } from '@testing-library/preact';
 import { describe, expect, it } from 'vitest';
 
 import { Desktop } from '../components/Desktop';
@@ -7,12 +8,21 @@ import { WindowProvider } from '../lib/window-context';
 
 function mount() {
 	return render(
-		<ContextMenuProvider>
-			<WindowProvider>
-				<Desktop />
-			</WindowProvider>
-		</ContextMenuProvider>
+		<LocationProvider>
+			<ContextMenuProvider>
+				<WindowProvider>
+					<Desktop />
+				</WindowProvider>
+			</ContextMenuProvider>
+		</LocationProvider>
 	);
+}
+
+/** Counts the windows that are not `display: none`. */
+function visibleWindows(container: Element): number {
+	return [...container.querySelectorAll<HTMLElement>('.window')].filter(
+		(node) => node.style.display !== 'none'
+	).length;
 }
 
 describe('desktop shell', () => {
@@ -52,5 +62,24 @@ describe('desktop shell', () => {
 		mount();
 		fireEvent.click(screen.getByRole('button', { name: /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)/ }));
 		expect(screen.getByRole('dialog', { name: 'Date and time' })).toBeTruthy();
+	});
+
+	it('clears the desktop from the Apple logo and the brand name', () => {
+		const { container } = mount();
+		// Scoped to the menu bar: the finder sidebar has a "Resume" item too.
+		const menu = within(screen.getByRole('navigation', { name: 'Menu bar' }));
+
+		fireEvent.click(menu.getByRole('button', { name: 'Projects' }));
+		fireEvent.click(menu.getByRole('button', { name: 'Resume' }));
+		expect(visibleWindows(container)).toBe(2);
+
+		fireEvent.click(menu.getByRole('button', { name: 'Close all windows' }));
+		expect(visibleWindows(container)).toBe(0);
+
+		fireEvent.click(menu.getByRole('button', { name: 'Projects' }));
+		expect(visibleWindows(container)).toBe(1);
+
+		fireEvent.click(menu.getByRole('button', { name: /Aashir/ }));
+		expect(visibleWindows(container)).toBe(0);
 	});
 });
