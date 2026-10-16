@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-import { desktop, dockSections, type SectionMeta } from '../content';
+import { desktop, dockSections, sectionById, type SectionId, type SectionMeta } from '../content';
 import { contentMenu } from '../lib/content-menu';
 import { useContextMenu } from '../lib/context-menu';
 import { loadGsap } from '../lib/gsap';
+import { useLongPress } from '../lib/long-press';
 import { openSection } from '../lib/open-section';
 import { useWindows } from '../lib/window-context';
 
@@ -33,8 +34,17 @@ export function Dock() {
 			}
 		});
 
+	// Touch devices have no hover, so they reach the same menu by long-pressing an icon.
+	const longPress = useLongPress((target, point) => {
+		const id = target.dataset.longPress as SectionId | undefined;
+		const section = id ? sectionById.get(id) : undefined;
+		if (section) openAt(point, menuFor(section));
+	});
+
 	// Magnify icons by the pointer's distance, gliding via GSAP.
 	useEffect(() => {
+		if (window.matchMedia('(hover: none)').matches) return;
+
 		const container = containerRef.current;
 		if (!container) return;
 
@@ -86,7 +96,7 @@ export function Dock() {
 
 	return (
 		<section id='dock' aria-label='Dock'>
-			<div class='dock-container' ref={containerRef}>
+			<div class='dock-container' ref={containerRef} {...longPress}>
 				{dockSections.map((section) => (
 					<ul key={section.id} class='group relative flex justify-center'>
 						<li>
@@ -94,6 +104,7 @@ export function Dock() {
 								type='button'
 								class='dock-icon'
 								aria-label={section.name}
+								data-long-press={section.id}
 								onClick={() => openSection(windowsApi, section.id)}
 								onContextMenu={(event) => openAt(event, menuFor(section))}>
 								<img src={section.icon} alt='' loading='lazy' />

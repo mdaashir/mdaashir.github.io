@@ -11,6 +11,7 @@ import {
 } from '../content';
 import { useContextMenu } from '../lib/context-menu';
 import { loadDraggable } from '../lib/gsap';
+import { useLongPress } from '../lib/long-press';
 import { useWindows } from '../lib/window-context';
 
 const FAVORITES_HEADING = sectionData.projects?.sidebarHeading ?? 'Favorites';
@@ -78,6 +79,12 @@ export function Finder() {
 			instances.forEach((instance) => instance.kill());
 		};
 	}, [viewKey]);
+
+	// Touch devices reach the same item menu by long-pressing an icon.
+	const longPress = useLongPress((target, point) => {
+		const node = children.find((entry) => entry.id === target.dataset.longPress);
+		if (node) openAt(point, menuFor(node));
+	});
 
 	if (!location) return null;
 
@@ -160,7 +167,7 @@ export function Finder() {
 				)}
 			</aside>
 
-			<div class='finder__content' ref={contentRef}>
+			<div class='finder__content' ref={contentRef} {...longPress}>
 				{folder && (
 					<button type='button' class='finder__back' onClick={() => setFolder(null)}>
 						‹ {location.name}
@@ -173,6 +180,7 @@ export function Finder() {
 								<button
 									type='button'
 									class={`finder__item ${node.position ?? ''}`}
+									data-long-press={node.id}
 									onClick={() => {
 										if (draggedRef.current) return;
 										activate(node);

@@ -4,6 +4,7 @@ import { desktop, desktopInfoFile, shortcuts, type DesktopShortcut } from '../co
 import { contentMenu } from '../lib/content-menu';
 import { useContextMenu } from '../lib/context-menu';
 import { loadDraggable } from '../lib/gsap';
+import { useLongPress } from '../lib/long-press';
 import { openSection } from '../lib/open-section';
 import { useWindows } from '../lib/window-context';
 
@@ -70,13 +71,20 @@ export function DesktopIcons() {
 			}
 		});
 
+	// Touch devices reach the same menu by long-pressing an icon.
+	const longPress = useLongPress((target, point) => {
+		const shortcut = shortcuts.find((entry) => entry.id === target.dataset.longPress);
+		if (shortcut) openAt(point, menuFor(shortcut));
+	});
+
 	return (
-		<section id='desktop-icons' aria-label='Desktop' ref={rootRef}>
+		<section id='desktop-icons' aria-label='Desktop' ref={rootRef} {...longPress}>
 			{shortcuts.map((shortcut) => (
 				<button
 					key={shortcut.id}
 					type='button'
 					class={`desktop-icon ${shortcut.position}`}
+					data-long-press={shortcut.id}
 					onClick={() => {
 						if (draggedRef.current) return;
 						openSection(windowsApi, 'projects');

@@ -1,10 +1,19 @@
 import { LocationProvider } from 'preact-iso';
 import { fireEvent, render, screen, within } from '@testing-library/preact';
-import { describe, expect, it } from 'vitest';
+import { act } from 'preact/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Desktop } from '../components/Desktop';
+import { sections } from '../content';
 import { ContextMenuProvider } from '../lib/context-menu';
 import { WindowProvider } from '../lib/window-context';
+
+/** Dispatches a touch event with a `touches` list, which jsdom does not provide. */
+function touch(type: string, x: number, y: number): Event {
+	const event = new Event(type, { bubbles: true });
+	Object.defineProperty(event, 'touches', { value: [{ clientX: x, clientY: y }] });
+	return event;
+}
 
 function mount() {
 	return render(
@@ -81,5 +90,61 @@ describe('desktop shell', () => {
 
 		fireEvent.click(menu.getByRole('button', { name: /Aashir/ }));
 		expect(visibleWindows(container)).toBe(0);
+	});
+
+	it('renders both device modes, so CSS can switch between them', () => {
+		const { container } = mount();
+		expect(container.querySelector('.desktop-shell')).toBeTruthy();
+		expect(container.querySelector('.phone-shell')).toBeTruthy();
+	});
+
+	it('mirrors the enabled sections as phone tiles, skipping the archive', () => {
+		const { container } = mount();
+
+		const tiles = [...container.querySelectorAll('.phone__app')].map((node) =>
+			node.textContent?.trim()
+		);
+		// The archive lives inside the finder, so it has no tile of its own.
+		const expected = sections.filter((section) => section.id !== 'archive').map((s) => s.name);
+
+		expect(tiles).toEqual(expected);
+		expect(container.querySelector('.phone__home-indicator')).toBeTruthy();
+	});
+
+	it('opens the app menu when a dock icon is long-pressed', () => {
+		vi.useFakeTimers();
+		try {
+			const { container } = mount();
+			const icon = container.querySelector('.dock-icon[data-long-press]');
+			expect(icon).toBeTruthy();
+
+			act(() => {
+				icon?.dispatchEvent(touch('touchstart', 120, 600));
+				vi.advanceTimersByTime(600);
+			});
+
+			expect(screen.getByRole('menu')).toBeTruthy();
+			expect(screen.getByRole('menuitem', { name: 'Open' })).toBeTruthy();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it('abandons the long press when the finger moves, so scrolling still works', () => {
+		vi.useFakeTimers();
+		try {
+			const { container } = mount();
+			const icon = container.querySelector('.dock-icon[data-long-press]');
+
+			act(() => {
+				icon?.dispatchEvent(touch('touchstart', 120, 600));
+				icon?.dispatchEvent(touch('touchmove', 120, 560));
+				vi.advanceTimersByTime(600);
+			});
+
+			expect(screen.queryByRole('menu')).toBeNull();
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 });
