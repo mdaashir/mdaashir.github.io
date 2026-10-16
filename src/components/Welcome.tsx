@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 
+import { profile } from '../content';
 import { loadGsap } from '../lib/gsap';
-
-const GREETING = "Hey, I'm Aashir!";
-const HEADLINE = 'portfolio.';
 
 function Letters({ text, className }: { text: string; className: string }) {
 	return (
@@ -59,11 +57,11 @@ export function Welcome() {
 	return (
 		<section id='welcome' ref={ref} class='abs-center col-center px-6 text-center'>
 			<p class='whitespace-nowrap text-3xl max-sm:text-2xl'>
-				<Letters text={GREETING} className='font-sf' />
+				<Letters text={profile.greeting} className='font-sf' />
 			</p>
 			{/* Figma: the hero word is 100px Playwrite US Trad. */}
 			<h1 class='mt-2 whitespace-nowrap text-[6.25rem] leading-[1.1] max-sm:text-7xl'>
-				<Letters text={HEADLINE} className='font-playwrite' />
+				<Letters text={profile.headline} className='font-playwrite' />
 			</h1>
 		</section>
 	);

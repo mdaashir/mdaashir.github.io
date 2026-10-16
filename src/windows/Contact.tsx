@@ -1,29 +1,34 @@
-import { socials } from '../data/socials';
+import { sectionData } from '../content';
 
 export function Contact() {
+	const section = sectionData.contact;
+	if (!section) return null;
+
 	return (
 		<div class='contact__body'>
 			<div class='flex items-center gap-4'>
-				<img class='contact__avatar' src='/images/adrian.jpg' alt='' loading='lazy' />
+				{section.avatar && (
+					<img class='contact__avatar' src={section.avatar} alt='' loading='lazy' />
+				)}
 				<div>
-					<h3 class='text-lg font-semibold'>Let&rsquo;s connect</h3>
-					<p class='text-sm text-label-2 dark:text-dark-100'>
-						Got an idea, a bug to squash, or just want to talk tech? I&rsquo;m in.
-					</p>
+					{section.heading && <h3 class='text-lg font-semibold'>{section.heading}</h3>}
+					{section.blurb && (
+						<p class='text-sm text-label-2 dark:text-dark-100'>{section.blurb}</p>
+					)}
 				</div>
 			</div>
 
 			<ul class='contact__tiles'>
-				{socials.map((social) => (
-					<li key={social.id}>
+				{section.links.map((link) => (
+					<li key={link.text}>
 						<a
 							class='contact__tile'
-							href={social.link}
+							href={link.link}
 							target='_blank'
 							rel='noopener noreferrer'
-							style={{ backgroundColor: social.bg }}>
-							<img src={social.icon} alt='' loading='lazy' />
-							<span>{social.text}</span>
+							style={link.bg ? { backgroundColor: link.bg } : undefined}>
+							<img src={link.icon} alt='' loading='lazy' />
+							<span>{link.text}</span>
 						</a>
 					</li>
 				))}

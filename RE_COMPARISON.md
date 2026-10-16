@@ -54,7 +54,7 @@ Reproduce with the preview server running (`npm run build && npm run preview`, p
 
 ## Intentionally not matched
 
-- **Content** — projects, copy and images are still placeholders (see `src/data/`).
+- **Content** — projects, copy and images are still placeholders (see `content/`).
 - **Drag from the title bar**, not the whole window: the reference makes the entire window draggable,
   which fights scrolling inside window bodies.
 - **Three menu-bar items** rather than the Figma file's *Projects / Testimonials / Contact / Resume*:

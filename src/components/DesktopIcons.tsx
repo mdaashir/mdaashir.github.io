@@ -1,23 +1,14 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-import { locations, type FileNode, type FolderNode } from '../data/locations';
+import { desktop, desktopInfoFile, shortcuts, type DesktopShortcut } from '../content';
+import { contentMenu } from '../lib/content-menu';
 import { useContextMenu } from '../lib/context-menu';
 import { loadDraggable } from '../lib/gsap';
+import { openSection } from '../lib/open-section';
 import { useWindows } from '../lib/window-context';
 
-/** The project folders shown as desktop shortcuts. */
-const desktopNodes = locations.work.children.filter(
-	(node): node is FolderNode => node.kind === 'folder'
-);
-
-/**
- * `windowPosition` is the desktop-shortcut placement in the reference data
- * (the finder `position` is the in-window icon placement).
- */
-const DEFAULT_POSITION = 'top-[5vh] left-5';
-
 export function DesktopIcons() {
-	const { open } = useWindows();
+	const windowsApi = useWindows();
 	const { openAt } = useContextMenu();
 	const rootRef = useRef<HTMLElement>(null);
 	const draggedRef = useRef(false);
@@ -55,49 +46,44 @@ export function DesktopIcons() {
 			cancelled = true;
 			instances.forEach((instance) => instance.kill());
 		};
-	}, []);
+	}, [shortcuts.length]);
 
-	const showInfo = (folder: FolderNode) => {
-		const files = folder.children.filter((child) => child.kind === 'file').length;
-		const info: FileNode = {
-			id: folder.id,
-			name: `${folder.name}.txt`,
-			icon: '/images/txt.png',
-			kind: 'file',
-			fileType: 'txt',
-			subtitle: folder.name,
-			description: [
-				`${files} items in this project folder.`,
-				'Open it from the Portfolio window. Icons on the desktop can be dragged anywhere.',
-			],
-		};
-		open('txtfile', { file: info });
-	};
+	const menuFor = (shortcut: DesktopShortcut) =>
+		contentMenu(desktop.iconContextMenu, (item) => {
+			switch (item.action) {
+				case 'open':
+					return { onSelect: () => openSection(windowsApi, 'projects') };
+				case 'info':
+					return {
+						onSelect: () =>
+							windowsApi.open('txtfile', {
+								file: {
+									...desktopInfoFile,
+									name: `${shortcut.name}.txt`,
+									subtitle: shortcut.name,
+									description: shortcut.description ?? desktopInfoFile.description,
+								},
+							}),
+					};
+				default:
+					return undefined;
+			}
+		});
 
 	return (
 		<section id='desktop-icons' aria-label='Desktop' ref={rootRef}>
-			{desktopNodes.map((folder) => (
+			{shortcuts.map((shortcut) => (
 				<button
-					key={folder.id}
+					key={shortcut.id}
 					type='button'
-					class={`desktop-icon ${folder.windowPosition ?? DEFAULT_POSITION}`}
+					class={`desktop-icon ${shortcut.position}`}
 					onClick={() => {
 						if (draggedRef.current) return;
-						open('finder', { location: 'work' });
+						openSection(windowsApi, 'projects');
 					}}
-					onContextMenu={(event) =>
-						openAt(event, [
-							{ label: 'Open', onSelect: () => open('finder', { location: 'work' }) },
-							{ label: 'Open in New Window', disabled: true },
-							{ separator: true },
-							{ label: 'Get Info', hint: '⌘I', onSelect: () => showInfo(folder) },
-							{ label: 'Rename', disabled: true },
-							{ separator: true },
-							{ label: 'Move to Trash', hint: '⌘⌫', disabled: true },
-						])
-					}>
-					<img src={folder.icon} alt='' />
-					<span>{folder.name}</span>
+					onContextMenu={(event) => openAt(event, menuFor(shortcut))}>
+					<img src={shortcut.icon} alt='' />
+					<span>{shortcut.name}</span>
 				</button>
 			))}
 		</section>

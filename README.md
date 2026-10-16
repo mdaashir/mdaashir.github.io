@@ -60,29 +60,37 @@ npm run dev        # http://localhost:5173
 
 ## Personalising the content
 
-**All copy is placeholder.** Everything that renders as content lives in `src/data/`:
+**All copy is placeholder.** Everything the site renders comes from `content/`, so the portfolio is
+fully customisable without touching component code. See [`content/README.md`](./content/README.md)
+for the full guide.
 
-| File             | Contents                                     |
-| ---------------- | -------------------------------------------- |
-| `nav.ts`         | Menu-bar links and status icons              |
-| `dock.ts`        | Dock apps and their labels                   |
-| `locations.ts`   | The finder filesystem (projects, about, CV)  |
-| `blog.ts`        | Article cards for the safari window          |
-| `techstack.ts`   | Terminal skill groups                        |
-| `socials.ts`     | Contact tiles                                |
-| `gallery.ts`     | Photos sidebar + gallery                     |
-| `windows.ts`     | Window ids and the initial z-index           |
+| File                  | Contents                                                      |
+| --------------------- | ------------------------------------------------------------- |
+| `site.json`           | Name, brand, domain, SEO title/description, theme default      |
+| `profile.json`        | Name, hero greeting/headline, avatar, the About me folder      |
+| `menu.json`           | Menu-bar links and status icons, plus dock order               |
+| `desktop.json`        | Desktop context menus and the Get Info file                    |
+| `sections/*.json`     | One file per app: projects, articles, gallery, contact, skills, resume, archive |
 
-Swap those files for real content and nothing else needs to change. Images live in
-`public/images/`, `public/icons/` and the CV at `public/files/resume.pdf`.
+Delete a file from `content/sections/` (or set `"enabled": false`) and that app disappears from the
+dock, the menu bar, the desktop, the mobile layout, and can no longer be opened. Sections with no
+content are skipped automatically, so nothing ever renders empty chrome. Every referenced
+`/images/…`, `/icons/…` and `/files/…` path is checked by the test suite.
 
 ## Project structure
 
 ```
+content/            # Everything the site renders — edit this, not the code
+├── site.json       # Name, brand, domain, SEO, theme default
+├── profile.json    # Hero, avatar, About me
+├── menu.json       # Menu bar + dock order
+├── desktop.json    # Desktop menus and Get Info
+└── sections/       # One file per app; delete one and that app disappears
+
 src/
 ├── components/     # Desktop shell: Menubar, Welcome, DesktopIcons, Dock, Window*, MobileShell
-├── data/           # All content (see above)
-├── lib/            # window-context, theme, gsap loader, pdf renderer, seo
+├── content/        # Typed loader for content/: types, skip rules, finder derivation
+├── lib/            # window store, theme, gsap loader, pdf renderer, seo, menus
 ├── windows/        # Finder, Safari, Photos, Contact, Terminal, Resume, TxtFile, ImgFile
 ├── __tests__/      # Vitest suites + setup
 ├── index.tsx       # App entry, routes, prerender export
@@ -93,17 +101,17 @@ src/
 
 The heavy dependencies are deliberately deferred — nothing below is in the initial payload:
 
-| Chunk                   | Size (gzip) | When it loads              |
-| ----------------------- | ----------- | -------------------------- |
-| Initial JS + CSS        | ~22 kB      | Immediately                |
-| GSAP core (+ Draggable) | ~41 kB      | After first paint          |
-| pdf.js + worker         | ~131 kB     | Only when the CV window opens |
+| Chunk                   | Size (gzip) | When it loads                 |
+| ----------------------- | ----------- | ----------------------------- |
+| Initial JS + CSS        | ~27 kB      | Immediately                   |
+| GSAP core (+ Draggable) | ~40 kB      | After first paint             |
+| pdf.js + worker         | ~128 kB     | Only when the CV window opens |
 
 ## Deployment
 
 ### GitHub Pages (automatically)
 
-Pushing to `main` or `Migrate` runs the tests, builds, and deploys `dist/` via GitHub Actions.
+Pushing to `main` or `migrate` runs the tests, builds, and deploys `dist/` via GitHub Actions.
 Enable Pages with the **GitHub Actions** source in the repository settings.
 
 ### Manual

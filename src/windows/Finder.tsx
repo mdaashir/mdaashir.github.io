@@ -1,16 +1,23 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 import {
+	LOCATION_ORDER,
 	locations,
+	sectionData,
+	site,
 	type FolderNode,
 	type LocationId,
 	type TreeNode,
-} from '../data/locations';
+} from '../content';
 import { useContextMenu } from '../lib/context-menu';
 import { loadDraggable } from '../lib/gsap';
 import { useWindows } from '../lib/window-context';
 
-const SIDEBAR: LocationId[] = ['work', 'about', 'resume', 'trash'];
+const FAVORITES_HEADING = sectionData.projects?.sidebarHeading ?? 'Favorites';
+
+/** Locations that actually exist, in sidebar order. */
+const available: LocationId[] = LOCATION_ORDER.filter((id) => locations[id]);
+const fallback: LocationId = available[0] ?? 'work';
 
 function isFolder(node: TreeNode): node is FolderNode {
 	return node.kind === 'folder';
@@ -20,19 +27,21 @@ export function Finder() {
 	const { windows, open } = useWindows();
 	const { openAt } = useContextMenu();
 	const payload = windows.finder.data;
-	const [locationId, setLocationId] = useState<LocationId>('work');
+	const [selected, setSelected] = useState<LocationId>(fallback);
 	const [folder, setFolder] = useState<FolderNode | null>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const draggedRef = useRef(false);
 
 	useEffect(() => {
-		if (!payload?.location) return;
-		setLocationId(payload.location);
+		const requested = payload?.location;
+		if (!requested) return;
+		setSelected(available.includes(requested) ? requested : fallback);
 		setFolder(null);
 	}, [payload?.location]);
 
+	const locationId = available.includes(selected) ? selected : fallback;
 	const location = locations[locationId];
-	const children = folder ? folder.children : location.children;
+	const children = folder ? folder.children : (location?.children ?? []);
 	const viewKey = `${locationId}:${folder?.id ?? 'root'}`;
 
 	// Icons inside the finder can be repositioned within the content area.
@@ -70,6 +79,8 @@ export function Finder() {
 		};
 	}, [viewKey]);
 
+	if (!location) return null;
+
 	const activate = (node: TreeNode) => {
 		if (isFolder(node)) {
 			setFolder(node);
@@ -102,17 +113,10 @@ export function Finder() {
 			];
 		}
 		return [
-			{
-				label: 'Open',
-				onSelect: () => activate(node),
-			},
+			{ label: 'Open', onSelect: () => activate(node) },
 			{ label: 'Open in New Window', disabled: true },
 			{ separator: true as const },
-			{
-				label: 'Get Info',
-				hint: '⌘I',
-				onSelect: () => open('txtfile', { file: node }),
-			},
+			{ label: 'Get Info', hint: '⌘I', onSelect: () => open('txtfile', { file: node }) },
 			{ separator: true as const },
 			{ label: 'Move to Trash', hint: '⌘⌫', disabled: true },
 		];
@@ -121,42 +125,39 @@ export function Finder() {
 	return (
 		<div class='finder__body'>
 			<aside class='sidebar'>
-				<p class='sidebar__heading'>Favorites</p>
+				<p class='sidebar__heading'>{FAVORITES_HEADING}</p>
 				<ul class='space-y-0.5'>
-					{SIDEBAR.map((id) => (
+					{available.map((id) => (
 						<li key={id}>
 							<button
 								type='button'
-								class={`sidebar__item ${
-									locationId === id && !folder ? 'sidebar__item--active' : ''
-								}`}
+								class={`sidebar__item ${locationId === id && !folder ? 'sidebar__item--active' : ''}`}
 								onClick={() => {
-									setLocationId(id);
+									setSelected(id);
 									setFolder(null);
 								}}>
-								<img src={locations[id].icon} alt='' />
-								<span class='truncate'>{locations[id].name}</span>
+								<img src={locations[id]?.icon} alt='' />
+								<span class='truncate'>{locations[id]?.name}</span>
 							</button>
 						</li>
 					))}
 				</ul>
 
-				<p class='sidebar__heading'>{folder ? folder.name : location.name}</p>
-				<ul class='space-y-0.5'>
-					{children
-						.filter((node) => node.kind === 'folder')
-						.map((node) => (
-							<li key={`side-${node.id}-${node.name}`}>
-								<button
-									type='button'
-									class='sidebar__item'
-									onClick={() => setFolder(node as FolderNode)}>
-									<img src={node.icon} alt='' />
-									<span class='truncate'>{node.name}</span>
-								</button>
-							</li>
-						))}
-				</ul>
+				{children.some(isFolder) && (
+					<>
+						<p class='sidebar__heading'>{folder ? folder.name : location.name}</p>
+						<ul class='space-y-0.5'>
+							{children.filter(isFolder).map((node) => (
+								<li key={`side-${node.id}`}>
+									<button type='button' class='sidebar__item' onClick={() => setFolder(node)}>
+										<img src={node.icon} alt='' />
+										<span class='truncate'>{node.name}</span>
+									</button>
+								</li>
+							))}
+						</ul>
+					</>
+				)}
 			</aside>
 
 			<div class='finder__content' ref={contentRef}>
@@ -165,23 +166,27 @@ export function Finder() {
 						‹ {location.name}
 					</button>
 				)}
-				<ul>
-					{children.map((node) => (
-						<li key={`${node.kind}-${node.id}-${node.name}`}>
-							<button
-								type='button'
-								class={`finder__item ${node.position ?? ''}`}
-								onClick={() => {
-									if (draggedRef.current) return;
-									activate(node);
-								}}
-								onContextMenu={(event) => openAt(event, menuFor(node))}>
-								<img src={node.icon} alt='' />
-								<span>{node.name}</span>
-							</button>
-						</li>
-					))}
-				</ul>
+				{children.length > 0 ? (
+					<ul>
+						{children.map((node) => (
+							<li key={`${node.kind}-${node.id}`}>
+								<button
+									type='button'
+									class={`finder__item ${node.position ?? ''}`}
+									onClick={() => {
+										if (draggedRef.current) return;
+										activate(node);
+									}}
+									onContextMenu={(event) => openAt(event, menuFor(node))}>
+									<img src={node.icon} alt='' />
+									<span>{node.name}</span>
+								</button>
+							</li>
+						))}
+					</ul>
+				) : (
+					folder && <p class='finder__empty'>{site.ui.emptyFolder}</p>
+				)}
 			</div>
 		</div>
 	);

@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 
-import type { WindowId } from '../data/windows';
+import type { WindowId } from '../lib/windows';
 import { loadDraggable, loadGsap } from '../lib/gsap';
 import { useWindows } from '../lib/window-context';
 

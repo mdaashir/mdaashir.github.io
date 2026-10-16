@@ -1069,5 +1069,12 @@
 		inset: 0;
 		z-index: 0;
 	}
+
+	/** Shown when a finder folder has no items. */
+	.finder__empty {
+		padding: 1.5rem;
+		font-size: 0.8125rem;
+		color: var(--color-label-3);
+	}
 }
 

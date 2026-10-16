@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/preact';
 import { act } from 'preact/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import { INITIAL_Z_INDEX } from '../data/windows';
+import { INITIAL_Z_INDEX } from '../lib/windows';
 import { WindowProvider, useWindows, type WindowsApi } from '../lib/window-context';
 
 let api: WindowsApi;

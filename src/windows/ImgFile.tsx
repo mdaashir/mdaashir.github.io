@@ -1,3 +1,4 @@
+import { site } from '../content';
 import { useWindows } from '../lib/window-context';
 
 export function ImgFile() {
@@ -8,7 +9,7 @@ export function ImgFile() {
 			{file?.imageUrl ? (
 				<img src={file.imageUrl} alt={file.name} />
 			) : (
-				<p class='p-6 text-sm text-label-2'>No image selected.</p>
+				<p class='p-6 text-sm text-label-2'>{site.ui.noImageSelected}</p>
 			)}
 		</div>
 	);

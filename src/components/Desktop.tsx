@@ -5,12 +5,28 @@ import { ContextMenuHost } from './ContextMenuHost';
 import { DesktopIcons } from './DesktopIcons';
 import { Welcome } from './Welcome';
 import { WindowManager } from './WindowManager';
+import { desktop, desktopInfoFile } from '../content';
+import { contentMenu } from '../lib/content-menu';
 import { useContextMenu } from '../lib/context-menu';
+import { openSection } from '../lib/open-section';
 import { useWindows } from '../lib/window-context';
 
 export function Desktop() {
-	const { open } = useWindows();
+	const windowsApi = useWindows();
 	const { openAt } = useContextMenu();
+
+	const backgroundMenu = contentMenu(desktop.contextMenu, (item) => {
+		switch (item.action) {
+			case 'open': {
+				const section = item.section;
+				return section ? { onSelect: () => openSection(windowsApi, section) } : undefined;
+			}
+			case 'info':
+				return { onSelect: () => windowsApi.open('txtfile', { file: desktopInfoFile }) };
+			default:
+				return undefined;
+		}
+	});
 
 	return (
 		<>
@@ -18,34 +34,7 @@ export function Desktop() {
 			<div
 				class='desktop-surface'
 				aria-hidden='true'
-				onContextMenu={(event) =>
-					openAt(event, [
-						{ label: 'New Folder', disabled: true },
-						{ separator: true },
-						{ label: 'Open Projects', onSelect: () => open('finder', { location: 'work' }) },
-						{ label: 'Show Skills', onSelect: () => open('terminal') },
-						{
-							label: 'Get Info',
-							onSelect: () =>
-								open('txtfile', {
-									file: {
-										id: 0,
-										name: 'Desktop.txt',
-										icon: '/images/txt.png',
-										kind: 'file',
-										fileType: 'txt',
-										subtitle: 'macOS Portfolio',
-										description: [
-											'Double-click a desktop icon to open it — icons can be dragged anywhere.',
-											'Right-click for options, and use the dock along the bottom.',
-										],
-									},
-								}),
-						},
-						{ separator: true },
-						{ label: 'Change Wallpaper', hint: '⌘W', disabled: true },
-					])
-				}
+				onContextMenu={(event) => openAt(event, backgroundMenu)}
 			/>
 			<Menubar />
 			<Welcome />

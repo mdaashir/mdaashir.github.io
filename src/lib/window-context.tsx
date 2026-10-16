@@ -8,7 +8,7 @@ import {
 	type WindowId,
 	type WindowPayload,
 	type WindowState,
-} from '../data/windows';
+} from './windows';
 
 interface State {
 	windows: Record<WindowId, WindowState>;

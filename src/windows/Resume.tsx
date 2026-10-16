@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 
-import { RESUME_FILE } from '../data/locations';
+import { sectionData } from '../content';
 import { renderFirstPage } from '../lib/pdf';
 
 type Status = 'loading' | 'ready' | 'error';
 
 export function Resume() {
+	const section = sectionData.resume;
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [status, setStatus] = useState<Status>('loading');
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		if (!canvas) return;
+		if (!canvas || !section?.file) return;
 
 		let cancelled = false;
-		renderFirstPage(RESUME_FILE, canvas)
+		renderFirstPage(section.file, canvas)
 			.then(() => {
 				if (!cancelled) setStatus('ready');
 			})
@@ -25,25 +26,29 @@ export function Resume() {
 		return () => {
 			cancelled = true;
 		};
-	}, []);
+	}, [section?.file]);
+
+	if (!section) return null;
 
 	return (
 		<div class='resume__body'>
 			{status === 'error' ? (
 				<div class='p-8 text-center text-sm text-white/80'>
-					<p>Couldn&rsquo;t render the PDF inline.</p>
-					<a
-						class='mt-3 inline-block underline'
-						href={RESUME_FILE}
-						target='_blank'
-						rel='noopener noreferrer'>
-						Open the résumé
-					</a>
+					{section.error && <p>{section.error}</p>}
+					{section.openLabel && (
+						<a
+							class='mt-3 inline-block underline'
+							href={section.file}
+							target='_blank'
+							rel='noopener noreferrer'>
+							{section.openLabel}
+						</a>
+					)}
 				</div>
 			) : (
 				<>
-					{status === 'loading' && (
-						<p class='p-6 text-center text-sm text-white/70'>Loading résumé…</p>
+					{status === 'loading' && section.loading && (
+						<p class='p-6 text-center text-sm text-white/70'>{section.loading}</p>
 					)}
 					<canvas ref={canvasRef} class='resume__canvas' />
 				</>

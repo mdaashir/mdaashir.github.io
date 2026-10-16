@@ -1,17 +1,19 @@
+import { site } from '../content';
+
 export type Theme = 'light' | 'dark';
 
 export const THEME_KEY = 'theme';
 
 export function readTheme(): Theme {
-	if (typeof window === 'undefined') return 'dark';
+	if (typeof window === 'undefined') return site.theme.default;
 	try {
 		const stored = window.localStorage.getItem(THEME_KEY);
 		if (stored === 'dark' || stored === 'light') return stored;
 	} catch {
 		/* storage unavailable */
 	}
-	// The reference site defaults to the dark appearance.
-	return 'dark';
+	// Defaults to the appearance configured in content/site.json.
+	return site.theme.default;
 }
 
 export function applyTheme(theme: Theme): void {

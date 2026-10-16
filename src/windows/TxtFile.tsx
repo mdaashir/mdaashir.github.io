@@ -1,3 +1,4 @@
+import { site } from '../content';
 import { useWindows } from '../lib/window-context';
 
 export function TxtFile() {
@@ -13,7 +14,7 @@ export function TxtFile() {
 					))}
 				</>
 			) : (
-				<p>No file selected.</p>
+				<p>{site.ui.noFileSelected}</p>
 			)}
 		</div>
 	);

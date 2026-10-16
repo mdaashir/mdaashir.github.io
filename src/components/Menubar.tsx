@@ -2,7 +2,8 @@ import { useLocation } from 'preact-iso';
 import { useEffect, useState } from 'preact/hooks';
 
 import { Calendar } from './Calendar';
-import { navIcons, navLinks } from '../data/nav';
+import { hasSection, menu, site } from '../content';
+import { openSection } from '../lib/open-section';
 import { applyTheme, readTheme, toggleTheme, type Theme } from '../lib/theme';
 import { useWindows } from '../lib/window-context';
 
@@ -20,15 +21,15 @@ function formatClock(date: Date): string {
 }
 
 export function Menubar() {
-	const { toggle, closeAll } = useWindows();
+	const windowsApi = useWindows();
 	const { path, route } = useLocation();
 	const [theme, setTheme] = useState<Theme>('light');
 	const [clock, setClock] = useState('');
 	const [showCalendar, setShowCalendar] = useState(false);
 
-	/** The Apple logo and the brand name both clear the desktop. */
+	/** Both the Apple logo and the brand name clear the desktop. */
 	const closeAllWindows = () => {
-		closeAll();
+		windowsApi.closeAll();
 		if (path !== '/') route('/');
 	};
 
@@ -45,6 +46,9 @@ export function Menubar() {
 
 	const onToggleTheme = () => setTheme(toggleTheme(theme));
 
+	// A link whose section has no content is dropped along with the app itself.
+	const links = menu.links.filter((link) => hasSection(link.section));
+
 	return (
 		<>
 			<nav class='menubar' aria-label='Menu bar'>
@@ -52,31 +56,26 @@ export function Menubar() {
 					<button
 						type='button'
 						class='menubar__item'
-						aria-label='Close all windows'
-						title='Close all windows'
+						aria-label={menu.closeAllLabel}
+						title={menu.closeAllLabel}
 						onClick={closeAllWindows}>
 						<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
 					</button>
 					<button
 						type='button'
 						class='menubar__item text-[0.9375rem] font-bold'
-						title='Close all windows'
+						title={menu.closeAllLabel}
 						onClick={closeAllWindows}>
-						Aashir&rsquo;s Portfolio
+						{site.brand}
 					</button>
 					<ul class='ml-3 flex items-center gap-5'>
-						{navLinks.map((link) => (
-							<li key={link.id}>
+						{links.map((link) => (
+							<li key={link.section}>
 								<button
 									type='button'
 									class='menubar__item'
-									onClick={() =>
-										toggle(
-											link.target,
-											link.target === 'finder' ? { location: 'work' } : undefined
-										)
-									}>
-									{link.name}
+									onClick={() => openSection(windowsApi, link.section)}>
+									{link.label}
 								</button>
 							</li>
 						))}
@@ -85,24 +84,19 @@ export function Menubar() {
 
 				<div class='flex items-center gap-3'>
 					<ul class='flex items-center gap-2'>
-						{navIcons.map((icon) => (
-							<li key={icon.id}>
-								<img
-									class='menubar__icon'
-									src={icon.img}
-									alt={icon.label}
-									title={icon.label}
-								/>
+						{menu.statusIcons.map((icon) => (
+							<li key={icon.icon}>
+								<img class='menubar__icon' src={icon.icon} alt={icon.label} title={icon.label} />
 							</li>
 						))}
 					</ul>
 					<button
 						type='button'
 						class='menubar__item menubar__item--icon'
-						aria-label='Toggle appearance'
+						aria-label={menu.appearanceToggle.label}
 						aria-pressed={theme === 'dark'}
 						onClick={onToggleTheme}>
-						<img class='menubar__icon' src='/icons/mode.svg' alt='' />
+						<img class='menubar__icon' src={menu.appearanceToggle.icon} alt='' />
 					</button>
 					<button
 						type='button'

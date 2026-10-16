@@ -1,47 +1,49 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 
-import type { WindowId } from '../data/windows';
+import { sections, site, type SectionId, type SectionMeta } from '../content';
 import { Contact } from '../windows/Contact';
 import { Finder } from '../windows/Finder';
 import { Photos } from '../windows/Photos';
+import { Resume } from '../windows/Resume';
 import { Safari } from '../windows/Safari';
 import { Terminal } from '../windows/Terminal';
 
-interface MobileApp {
-	id: WindowId;
-	name: string;
-	icon: string;
-	render: () => ComponentChildren;
-}
+/**
+ * Sections that can render full-screen on mobile. The archive lives inside the finder, so it has no
+ * entry of its own.
+ */
+const RENDERERS: Partial<Record<SectionId, () => ComponentChildren>> = {
+	projects: () => <Finder />,
+	articles: () => <Safari />,
+	gallery: () => <Photos />,
+	contact: () => <Contact />,
+	skills: () => <Terminal />,
+	resume: () => <Resume />,
+};
 
-const APPS: MobileApp[] = [
-	{ id: 'finder', name: 'Portfolio', icon: 'finder.png', render: () => <Finder /> },
-	{ id: 'safari', name: 'Articles', icon: 'safari.png', render: () => <Safari /> },
-	{ id: 'photos', name: 'Gallery', icon: 'photos.png', render: () => <Photos /> },
-	{ id: 'contact', name: 'Contact', icon: 'contact.png', render: () => <Contact /> },
-	{ id: 'terminal', name: 'Skills', icon: 'terminal.png', render: () => <Terminal /> },
-];
+/** Only the enabled sections that have a mobile renderer. */
+const apps: SectionMeta[] = sections.filter((section) => RENDERERS[section.id]);
 
 export function MobileShell() {
-	const [active, setActive] = useState<MobileApp | null>(null);
+	const [active, setActive] = useState<SectionMeta | null>(null);
 
 	return (
 		<div class='mobile-shell'>
 			<header class='mb-5 flex items-center justify-between text-sm'>
-				<span class='font-semibold'>Aashir&rsquo;s Portfolio</span>
-				<span class='opacity-80'>iOS</span>
+				<span class='font-semibold'>{site.brand}</span>
+				{site.mobile.badge && <span class='opacity-80'>{site.mobile.badge}</span>}
 			</header>
 
 			<div class='grid grid-cols-4 gap-4'>
-				{APPS.map((app) => (
+				{apps.map((section) => (
 					<button
-						key={app.id}
+						key={section.id}
 						type='button'
 						class='col-center gap-1'
-						onClick={() => setActive(app)}>
-						<img src={`/images/${app.icon}`} alt='' class='h-14 w-14' loading='lazy' />
-						<span class='text-[0.6875rem]'>{app.name}</span>
+						onClick={() => setActive(section)}>
+						<img src={section.icon} alt='' class='h-14 w-14' loading='lazy' />
+						<span class='text-[0.6875rem]'>{section.name}</span>
 					</button>
 				))}
 			</div>
@@ -49,13 +51,13 @@ export function MobileShell() {
 			{active && (
 				<div class='fixed inset-0 z-[10000] flex flex-col bg-black/80 backdrop-blur-md'>
 					<header class='flex items-center justify-between px-4 py-3 text-sm'>
-						<span class='font-semibold'>{active.name}</span>
+						<span class='font-semibold'>{active.title}</span>
 						<button type='button' onClick={() => setActive(null)}>
 							Close
 						</button>
 					</header>
 					<div class='flex-1 overflow-y-auto rounded-t-2xl bg-panel text-label dark:bg-dark-700 dark:text-white'>
-						{active.render()}
+						{RENDERERS[active.id]?.()}
 					</div>
 				</div>
 			)}
