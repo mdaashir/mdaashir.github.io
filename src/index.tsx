@@ -1,6 +1,7 @@
 import { LocationProvider, Route, Router, hydrate, prerender as ssr } from 'preact-iso';
 
 import { Desktop } from './components/Desktop';
+import { ContextMenuProvider } from './lib/context-menu';
 import { WindowProvider } from './lib/window-context';
 import { getHead } from './lib/seo';
 import './style.css';
@@ -23,14 +24,16 @@ function NotFound() {
 export function App() {
 	return (
 		<LocationProvider>
-			<WindowProvider>
-				<main>
-					<Router>
-						<Route path='/' component={Desktop} />
-						<Route default component={NotFound} />
-					</Router>
-				</main>
-			</WindowProvider>
+			<ContextMenuProvider>
+				<WindowProvider>
+					<main>
+						<Router>
+							<Route path='/' component={Desktop} />
+							<Route default component={NotFound} />
+						</Router>
+					</main>
+				</WindowProvider>
+			</ContextMenuProvider>
 		</LocationProvider>
 	);
 }

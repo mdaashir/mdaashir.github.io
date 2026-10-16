@@ -133,3 +133,51 @@ gained `.dark` variants, and `.resume__body` now forces white text on its always
 
 **Verification.** Computed-style probes in both themes plus screenshots of the light and dark desktop
 with the finder, terminal, contact, articles and gallery windows open.
+
+## Fourth pass — pointer, dragging, menus, clock and trash
+
+Six requested behaviours, each verified in a real browser.
+
+**1. macOS cursors.** The reference uses native `grab` on everything draggable (`pointer` on controls,
+`auto` elsewhere). To actually *look* macOS — the reference can't, since it relies on the platform
+cursor — we ship SVG cursors as CSS custom properties: a white-with-black-outline arrow (hotspot 4,2),
+a pointing hand (8,2), and an I-beam (8,12). Probed values:
+
+| Element | Resolved cursor |
+| --- | --- |
+| body / desktop | `url(svg) 4 2, default` |
+| nav items, dock icons, sidebar, clock | `url(svg) 8 2, pointer` |
+| windows, desktop icons, finder items | `grab` |
+| text surfaces (`.txtfile__body`, terminal, articles, contact, résumé) | `url(svg) 8 12, text` + `user-select: text` |
+
+**2. Dock glide (magnification).** Matches the reference's marquee effect. Measuring with the pointer
+over icon 3:
+
+| | icon 1 | 2 | 3 | 4 | 5 | 6 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Reference | 56 | 59 | **70** | 59 | 56 | 56 |
+| Ours | 56 | 59 | **70** | 59 | 56 | 56 |
+
+Two bugs surfaced here: `pointermove` never fires for CDP-synthesised mouse input (now `mousemove`), and
+**`gsap.quickTo(el, 'scale')` silently does not apply** in gsap 3.15 — it only reset the transform,
+while `gsap.to(el, { scale })` works, so the tween uses `gsap.to` with `overwrite: 'auto'`. A third: the
+per-icon `<ul>`s are `position: relative`, so `offsetLeft` reported every icon at the same coordinate
+and the falloff was a no-op — centres are now measured from rects at rest.
+
+**3. Everything draggable.** Desktop icons and finder items are now GSAP `Draggable` (bounded), with a
+drag-guard so a drag doesn't also fire the click that opens a window. Verified: dragging icon 1 moved it
+from `[20,76]` to `[308,174]`.
+
+**4. Right-click menus.** The native context menu is replaced by a macOS-style blurred panel with
+disabled items, separators and `⌘`-style hints — on the desktop background, on desktop icons and on dock
+icons, each with its own items (Open / Get Info / Rename / Move to Trash, etc.). Dismissed by clicking
+away, `Escape`, or window blur, and clamped to stay inside the viewport.
+
+**5. Clock → calendar.** The menu-bar clock is now a button that opens a macOS calendar panel: month
+with `‹ ›` navigation, weekday row, muted adjacent-month days, **today in macOS red**, and a live
+"Friday, October 16 at 7:17 AM" footer.
+
+**6. The trash works.** It was `disabled` (as in the reference). Clicking it now opens the finder at the
+**Trash** location, showing `trash1.png` / `trash2.png`. It deliberately *navigates* rather than
+*topples*: the archive shares the finder window, so a plain toggle would have closed the finder when
+clicked while it was already open — which is exactly what happened on the first attempt.

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 
+import { Calendar } from './Calendar';
 import { navIcons, navLinks } from '../data/nav';
 import { applyTheme, readTheme, toggleTheme, type Theme } from '../lib/theme';
 import { useWindows } from '../lib/window-context';
@@ -21,6 +22,7 @@ export function Menubar() {
 	const { toggle } = useWindows();
 	const [theme, setTheme] = useState<Theme>('light');
 	const [clock, setClock] = useState('');
+	const [showCalendar, setShowCalendar] = useState(false);
 
 	useEffect(() => {
 		const initial = readTheme();
@@ -36,47 +38,62 @@ export function Menubar() {
 	const onToggleTheme = () => setTheme(toggleTheme(theme));
 
 	return (
-		<nav class='menubar' aria-label='Menu bar'>
-			<div class='flex items-center gap-5'>
-				<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
-				<span class='text-[0.9375rem] font-bold'>Aashir&rsquo;s Portfolio</span>
-				<ul class='flex items-center gap-5'>
-					{navLinks.map((link) => (
-						<li key={link.id}>
-							<button
-								type='button'
-								class='menubar__item'
-								onClick={() =>
-									toggle(
-										link.target,
-										link.target === 'finder' ? { location: 'work' } : undefined
-									)
-								}>
-								{link.name}
-							</button>
-						</li>
-					))}
-				</ul>
-			</div>
+		<>
+			<nav class='menubar' aria-label='Menu bar'>
+				<div class='flex items-center gap-5'>
+					<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
+					<span class='text-[0.9375rem] font-bold'>Aashir&rsquo;s Portfolio</span>
+					<ul class='flex items-center gap-5'>
+						{navLinks.map((link) => (
+							<li key={link.id}>
+								<button
+									type='button'
+									class='menubar__item'
+									onClick={() =>
+										toggle(
+											link.target,
+											link.target === 'finder' ? { location: 'work' } : undefined
+										)
+									}>
+									{link.name}
+								</button>
+							</li>
+						))}
+					</ul>
+				</div>
 
-			<div class='flex items-center gap-3'>
-				<ul class='flex items-center gap-2'>
-					{navIcons.map((icon) => (
-						<li key={icon.id}>
-							<img class='menubar__icon' src={icon.img} alt={icon.label} title={icon.label} />
-						</li>
-					))}
-				</ul>
-				<button
-					type='button'
-					class='menubar__item menubar__item--icon'
-					aria-label='Toggle appearance'
-					aria-pressed={theme === 'dark'}
-					onClick={onToggleTheme}>
-					<img class='menubar__icon' src='/icons/mode.svg' alt='' />
-				</button>
-				<time class='tabular-nums'>{clock}</time>
-			</div>
-		</nav>
+				<div class='flex items-center gap-3'>
+					<ul class='flex items-center gap-2'>
+						{navIcons.map((icon) => (
+							<li key={icon.id}>
+								<img
+									class='menubar__icon'
+									src={icon.img}
+									alt={icon.label}
+									title={icon.label}
+								/>
+							</li>
+						))}
+					</ul>
+					<button
+						type='button'
+						class='menubar__item menubar__item--icon'
+						aria-label='Toggle appearance'
+						aria-pressed={theme === 'dark'}
+						onClick={onToggleTheme}>
+						<img class='menubar__icon' src='/icons/mode.svg' alt='' />
+					</button>
+					<button
+						type='button'
+						class='menubar__item clock'
+						aria-haspopup='dialog'
+						aria-expanded={showCalendar}
+						onClick={() => setShowCalendar(true)}>
+						{clock}
+					</button>
+				</div>
+			</nav>
+			{showCalendar && <Calendar onClose={() => setShowCalendar(false)} />}
+		</>
 	);
 }

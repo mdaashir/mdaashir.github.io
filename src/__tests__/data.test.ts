@@ -45,8 +45,9 @@ describe('nav + dock data', () => {
 		}
 	});
 
-	it('keeps the archive dock app unopenable', () => {
+	it('opens the archive dock app at the trash location', () => {
 		const trash = dockApps.find((app) => app.id === 'trash');
-		expect(trash?.canOpen).toBe(false);
+		expect(trash?.canOpen).toBe(true);
+		expect(locations.trash.kind).toBe('folder');
 	});
 });
