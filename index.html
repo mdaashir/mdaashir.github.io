@@ -2,7 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<!--
+			__TITLE__, __FAVICON__, __THEME_KEY__ and __THEME_DEFAULT__ are replaced at build time from
+			content/site.json (see the `portfolio-html-content` plugin in vite.config.ts).
+		-->
+		<link rel="icon" type="image/x-icon" href="__FAVICON__" />
 		<link rel="icon" type="image/svg+xml" href="/macbook.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="color-scheme" content="light dark" />
@@ -16,13 +20,13 @@
 		/>
 		<script>
 			// Apply the persisted appearance before first paint so there is no flash.
-			// Defaults to dark, matching the reference design.
 			try {
-				var stored = localStorage.getItem('theme');
-				if (stored !== 'light') document.documentElement.classList.add('dark');
+				var stored = localStorage.getItem('__THEME_KEY__');
+				var theme = stored || '__THEME_DEFAULT__';
+				if (theme !== 'light') document.documentElement.classList.add('dark');
 			} catch (e) {}
 		</script>
-		<title>Mohamed Aashir S</title>
+		<title>__TITLE__</title>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this site.</noscript>

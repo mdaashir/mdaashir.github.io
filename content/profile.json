@@ -1,0 +1,20 @@
+{
+	"name": "Aashir",
+	"greeting": "Hey, I'm Aashir!",
+	"headline": "portfolio.",
+	"avatar": "/images/adrian.jpg",
+	"about": {
+		"enabled": true,
+		"location": { "name": "About me", "icon": "/icons/info.svg" },
+		"title": "Meet the developer behind the code",
+		"lines": [
+			"Hey! I build interfaces that feel fast, obvious and a little bit delightful.",
+			"I work across the stack — from the pixels to the API — and I care about the details that make a product feel considered."
+		],
+		"photos": [
+			{ "name": "me.png", "src": "/images/adrian.jpg", "position": "top-10 left-5" },
+			{ "name": "casual-me.png", "src": "/images/adrian-2.jpg", "position": "top-28 right-72" },
+			{ "name": "conference-me.png", "src": "/images/adrian-3.jpeg", "position": "top-52 left-80" }
+		]
+	}
+}

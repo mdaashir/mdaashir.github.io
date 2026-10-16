@@ -5,8 +5,25 @@ import { copyFileSync, existsSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import site from './content/site.json';
+
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
-const SITE_URL = 'https://mdaashir.github.io';
+
+const TITLE = site.title.replace(/\{name\}/g, site.name);
+
+/** Replaces the placeholders in index.html with values from content/site.json. */
+function htmlFromContent() {
+	return {
+		name: 'portfolio-html-content',
+		transformIndexHtml(html: string) {
+			return html
+				.replaceAll('__TITLE__', TITLE)
+				.replaceAll('__FAVICON__', site.favicon)
+				.replaceAll('__THEME_KEY__', 'theme')
+				.replaceAll('__THEME_DEFAULT__', site.theme.default);
+		},
+	};
+}
 
 /** Emits the GitHub Pages extras: a root 404.html and sitemap.xml. */
 function siteExtras() {
@@ -23,7 +40,7 @@ function siteExtras() {
 			const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 \t<url>
-\t\t<loc>${SITE_URL}/</loc>
+\t\t<loc>${site.url}/</loc>
 \t</url>
 </urlset>
 `;
@@ -35,6 +52,7 @@ function siteExtras() {
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
+		htmlFromContent(),
 		preact({
 			prerender: {
 				enabled: true,

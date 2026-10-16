@@ -1,0 +1,15 @@
+{
+	"links": [
+		{ "label": "Projects", "section": "projects" },
+		{ "label": "Contact", "section": "contact" },
+		{ "label": "Resume", "section": "resume" }
+	],
+	"statusIcons": [
+		{ "icon": "/icons/wifi.svg", "label": "Wi-Fi" },
+		{ "icon": "/icons/search.svg", "label": "Search" },
+		{ "icon": "/icons/user.svg", "label": "Account" }
+	],
+	"appearanceToggle": { "icon": "/icons/mode.svg", "label": "Toggle appearance" },
+	"closeAllLabel": "Close all windows",
+	"dock": ["projects", "articles", "gallery", "contact", "skills", "archive"]
+}

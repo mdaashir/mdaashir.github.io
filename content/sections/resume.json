@@ -1,0 +1,12 @@
+{
+	"enabled": true,
+	"title": "Resume.pdf",
+	"name": "Resume",
+	"icon": "/images/pdf.png",
+	"location": { "name": "Resume", "icon": "/icons/file.svg" },
+	"fileName": "Resume.pdf",
+	"file": "/files/resume.pdf",
+	"loading": "Loading résumé…",
+	"error": "Couldn’t render the PDF inline.",
+	"openLabel": "Open the résumé"
+}

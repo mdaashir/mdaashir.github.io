@@ -1,0 +1,23 @@
+{
+	"name": "Mohamed Aashir S",
+	"brand": "Aashir's Portfolio",
+	"url": "https://mdaashir.github.io",
+	"title": "{name} — macOS Portfolio",
+	"description": "An interactive macOS-style portfolio for Mohamed Aashir S — browse projects, articles, gallery and skills through a draggable desktop interface.",
+	"notFound": {
+		"title": "Page not found — {name}",
+		"description": "The page you were looking for could not be found."
+	},
+	"themeColor": "#000000",
+	"theme": { "default": "dark" },
+	"favicon": "/favicon.ico",
+	"mobile": { "badge": "iOS" },
+	"ui": {
+		"emptyFolder": "This folder is empty.",
+		"noFileSelected": "No file selected.",
+		"noImageSelected": "No image selected.",
+		"notFoundHeading": "Page not found",
+		"notFoundBody": "That route doesn't exist on this desktop.",
+		"notFoundBack": "Back to the desktop"
+	}
+}

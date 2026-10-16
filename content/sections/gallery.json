@@ -1,0 +1,46 @@
+{
+	"enabled": true,
+	"title": "Gallery",
+	"icon": "/images/photos.png",
+	"sidebarHeading": "Photos",
+	"albums": [
+		{
+			"title": "Library",
+			"icon": "/icons/gicon1.svg"
+		},
+		{
+			"title": "Memories",
+			"icon": "/icons/gicon2.svg"
+		},
+		{
+			"title": "Places",
+			"icon": "/icons/file.svg"
+		},
+		{
+			"title": "People",
+			"icon": "/icons/gicon4.svg"
+		},
+		{
+			"title": "Favorites",
+			"icon": "/icons/gicon5.svg"
+		}
+	],
+	"photos": [
+		{
+			"src": "/images/gal1.png",
+			"alt": "Gallery image 1"
+		},
+		{
+			"src": "/images/gal2.png",
+			"alt": "Gallery image 2"
+		},
+		{
+			"src": "/images/gal3.png",
+			"alt": "Gallery image 3"
+		},
+		{
+			"src": "/images/gal4.png",
+			"alt": "Gallery image 4"
+		}
+	]
+}
