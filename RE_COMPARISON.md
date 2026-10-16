@@ -181,3 +181,20 @@ with `‹ ›` navigation, weekday row, muted adjacent-month days, **today in ma
 **Trash** location, showing `trash1.png` / `trash2.png`. It deliberately *navigates* rather than
 *topples*: the archive shares the finder window, so a plain toggle would have closed the finder when
 clicked while it was already open — which is exactly what happened on the first attempt.
+
+## Fifth pass — menu-bar hover is macOS, not a link
+
+The reference styles menu-bar items with `hover:underline`, which reads as a hyperlink. Real macOS
+treats them as buttons, so ours no longer underlines:
+
+| | Before | After |
+| --- | --- | --- |
+| Hover | `text-decoration: underline` | rounded highlight — `rgba(0,0,0,0.08)` light / `rgba(255,255,255,0.14)` dark, 6px radius |
+| Panel open | — | accent blue `rgb(0,122,255)` with white text (`[aria-expanded='true']`) |
+| Cursor | hand | macOS arrow (`url(svg) 4 2, default`) |
+
+Two details worth noting: the highlight needed horizontal padding back on the items (macOS highlights a
+padded button, so the nav shifts slightly right of the reference's unpadded, underlined text), and the
+arrow override had to be explicit because a global `button { cursor: pointer }` was winning. The dock
+and sidebar keep the hand, matching the reference. This is a deliberate divergence in favour of macOS
+behaviour over reference fidelity.
