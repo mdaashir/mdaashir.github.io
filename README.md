@@ -120,6 +120,26 @@ Two layouts, switching at **640px** — the same breakpoint the reference site u
 - **Touch**: long-press opens the same menus as right-click (see `src/lib/long-press.ts`), and
   hover-only effects (dock magnification, tooltips) are disabled via `@media (hover: none)`.
 
+## Checking it in Polypane
+
+[Polypane](https://polypane.app/) shows the page in several synchronised panes at once, which is the
+quickest way to see a responsive bug. It can be driven from a script over its remote-debugging port:
+
+```bash
+# 1. Open Polypane with remote debugging and the page on screen
+"C:\Program Files\Polypane\Polypane.exe" --remote-debugging-port=5858 https://mdaashir.github.io/
+
+# 2. Read every pane, then run an axe-core pass in a phone and a desktop pane
+node tools/polypane-check.mjs
+```
+
+`tools/polypane-check.mjs` reports, per pane: viewport, which device mode CSS picked, horizontal
+overflow, root font-size, and whether any window sits under the dock. Do not reload panes from a
+script — it tears down Polypane's webview; the script opens windows idempotently instead.
+
+Note that axe flags text over the wallpaper (the hero and menu bar) as *needs manual review*, since
+it cannot compute contrast against an image. Those need Polypane's own contrast checker or an eye.
+
 ## Performance
 
 The heavy dependencies are deliberately deferred — nothing below is in the initial payload:
