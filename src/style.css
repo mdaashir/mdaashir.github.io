@@ -88,7 +88,7 @@
 		margin: 0;
 		font-family: var(--font-sf);
 		background-color: #0b0b0c;
-		background-image: url('/images/wallpaper.png');
+		background-image: var(--wallpaper);
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -106,6 +106,11 @@
 	:root {
 		color-scheme: light;
 		/*
+		 * Figma's desktop wallpaper, Light variant (the one the HomePage frame uses). The dark
+		 * appearance swaps in a different asset — they are two images, not one shared background.
+		 */
+		--wallpaper: url('/images/wallpaper-light.jpg');
+		/*
 		 * How much height a window body may use. Derived from the worst case: the viewport minus
 		 * the menu bar (3rem), the dock and its margin (6rem) and the tallest window offset (8rem),
 		 * so no window can ever run underneath the dock on a short viewport.
@@ -116,6 +121,7 @@
 	.dark {
 		color-scheme: dark;
 		color: #fff;
+		--wallpaper: url('/images/wallpaper-dark.jpg');
 	}
 
 	main {
@@ -214,6 +220,15 @@
 	#welcome {
 		color: #fff;
 		text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+	}
+
+	/*
+	 * The light appearance sits on the pastel wallpaper, where white script type washes out —
+	 * flip it to ink and give it a light halo instead.
+	 */
+	:root:not(.dark) #welcome {
+		color: var(--color-label);
+		text-shadow: 0 2px 24px rgba(255, 255, 255, 0.6);
 	}
 
 	.hero-letter {
