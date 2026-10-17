@@ -4,7 +4,7 @@ import { act } from 'preact/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Desktop } from '../components/Desktop';
-import { sections } from '../content';
+import { menu, sections } from '../content';
 import { ContextMenuProvider } from '../lib/context-menu';
 import { WindowProvider } from '../lib/window-context';
 
@@ -109,6 +109,19 @@ describe('desktop shell', () => {
 
 		expect(tiles).toEqual(expected);
 		expect(container.querySelector('.phone__home-indicator')).toBeTruthy();
+	});
+
+	it('gives the phone a three-tab bar that mirrors the menu, not the whole app list', () => {
+		const { container } = mount();
+
+		const tabLabels = [...container.querySelectorAll('.phone__tab')].map((node) =>
+			node.textContent?.trim()
+		);
+
+		expect(tabLabels).toEqual(menu.links.slice(0, 3).map((link) => link.label));
+		expect(tabLabels).toHaveLength(3);
+		// The home grid still carries every app, so the bar is a shortcut, not the full list.
+		expect(container.querySelectorAll('.phone__app').length).toBeGreaterThan(3);
 	});
 
 	it('opens the app menu when a dock icon is long-pressed', () => {

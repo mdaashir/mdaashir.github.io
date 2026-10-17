@@ -1,7 +1,14 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import { menu, profile, sections, type SectionId, type SectionMeta } from '../content';
+import {
+	menu,
+	profile,
+	sectionById,
+	sections,
+	type SectionId,
+	type SectionMeta,
+} from '../content';
 import { useContextMenu, type MenuEntry } from '../lib/context-menu';
 import { useLongPress } from '../lib/long-press';
 import { Contact } from '../windows/Contact';
@@ -26,6 +33,23 @@ const RENDERERS: Partial<Record<SectionId, () => ComponentChildren>> = {
 
 /** Only the enabled sections that have a phone view, so disabled apps vanish here too. */
 const apps: SectionMeta[] = sections.filter((section) => RENDERERS[section.id]);
+
+interface PhoneTab {
+	label: string;
+	section: SectionMeta;
+}
+
+/**
+ * The tab bar follows the design's three primary tabs, but takes its labels from `menu.json` — the
+ * Figma kit's own tab labels ("Reading Now", "Library", "Audiobooks") are placeholders — and only
+ * includes sections that are actually enabled.
+ */
+const tabs: PhoneTab[] = menu.links
+	.flatMap((link) => {
+		const section = sectionById.get(link.section);
+		return section && RENDERERS[section.id] ? [{ label: link.label, section }] : [];
+	})
+	.slice(0, 3);
 
 /** "12:08 AM", as the iOS status bar shows it. */
 function PhoneClock() {
@@ -109,15 +133,15 @@ export function PhoneShell() {
 
 			<nav class='phone__bar' aria-label='Dock'>
 				<div class='phone__tabs'>
-					{apps.map((section) => (
+					{tabs.map(({ label, section }) => (
 						<button
 							key={section.id}
 							type='button'
 							class='phone__tab'
-							aria-label={section.name}
+							aria-label={label}
 							onClick={() => setActive(section)}>
 							<img src={section.icon} alt='' loading='lazy' />
-							<span>{section.name}</span>
+							<span>{label}</span>
 						</button>
 					))}
 				</div>
