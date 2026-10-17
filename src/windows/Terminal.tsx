@@ -13,7 +13,7 @@ export function Terminal() {
 			</p>
 
 			{section.columns && (
-				<div class='terminal__row mt-5 opacity-70'>
+				<div class='terminal__row mt-5'>
 					<span class='font-semibold'>{section.columns[0]}</span>
 					<span>{section.columns[1]}</span>
 				</div>
@@ -24,7 +24,7 @@ export function Terminal() {
 					<li key={group.category} class='flex items-start gap-3'>
 						<span aria-hidden='true'>✓</span>
 						<span class='w-24 flex-none font-semibold'>{group.category}</span>
-						<span class='opacity-90'>{group.items.join(', ')}</span>
+						<span>{group.items.join(', ')}</span>
 					</li>
 				))}
 			</ul>

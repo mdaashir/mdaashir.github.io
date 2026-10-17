@@ -35,7 +35,11 @@
 	--color-dark-700: #1e1e1e;
 	--color-dark-800: #ffffff1a;
 
-	--color-terminal: #00a154;
+	/*
+	 * Terminal green, per appearance. Both values clear 4.5:1 on their own panel (#fff and
+	 * #1e1e1e) — the light one at 6.1:1, the dark one at 9.0:1.
+	 */
+	--color-terminal: #00713c;
 	--color-terminal-dark: #2dd987;
 
 	--breakpoint-3xl: 1920px;
@@ -462,6 +466,11 @@
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
 		color: var(--color-terminal);
+	}
+
+	/* The darker panel needs the lighter green; using the light one here fails contrast. */
+	.dark .terminal__body {
+		color: var(--color-terminal-dark);
 	}
 
 	.terminal__row {
