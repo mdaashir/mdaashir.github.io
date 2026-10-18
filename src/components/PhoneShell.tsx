@@ -15,14 +15,17 @@ interface AppView {
 	location?: LocationId;
 }
 
-const RENDERERS: Partial<Record<SectionId, (view: AppView) => ComponentChildren>> = {
-	projects: (view) => <Finder initialLocation={view.location} />,
+const RENDERERS: Partial<Record<SectionId, (view: AppView, query: string) => ComponentChildren>> = {
+	projects: (view, query) => <Finder initialLocation={view.location} query={query} />,
 	articles: () => <Safari />,
 	gallery: () => <Photos />,
 	contact: () => <Contact />,
 	skills: () => <Terminal />,
 	resume: () => <Resume />,
 };
+
+/** Only the Work screens carry a search field in the design (pages 21-22). */
+const SEARCHABLE: SectionId[] = ['projects'];
 
 /** "12:08 AM", as the iOS status bar shows it. */
 function PhoneClock() {
@@ -88,6 +91,7 @@ export function PhoneShell() {
 	const [opened, setOpened] = useState<AppView | null>(null);
 	const [searching, setSearching] = useState(false);
 	const [query, setQuery] = useState('');
+	const [appQuery, setAppQuery] = useState('');
 
 	const matches = (app: PhoneApp) =>
 		!query || app.label.toLowerCase().includes(query.trim().toLowerCase());
@@ -100,11 +104,13 @@ export function PhoneShell() {
 		setOpened({ label: app.label, section: app.section, location: app.location });
 		setSearching(false);
 		setQuery('');
+		setAppQuery('');
 	};
 
 	const close = () => {
 		setOpened(null);
 		setQuery('');
+		setAppQuery('');
 	};
 
 	const title = opened
@@ -183,7 +189,23 @@ export function PhoneShell() {
 						</button>
 					</header>
 
-					<div class='phone__app-body'>{RENDERERS[opened.section]?.(opened)}</div>
+					{SEARCHABLE.includes(opened.section) && (
+						<div class='phone__app-search'>
+							<SearchGlyph />
+							<input
+								type='search'
+								value={appQuery}
+								placeholder={phone.search.placeholder}
+								aria-label={phone.search.placeholder}
+								onInput={(event) => setAppQuery((event.target as HTMLInputElement).value)}
+							/>
+							<span class='phone__app-search-mic' aria-hidden='true'>
+								🎤
+							</span>
+						</div>
+					)}
+
+					<div class='phone__app-body'>{RENDERERS[opened.section]?.(opened, appQuery)}</div>
 
 					<nav class='phone__tabs' aria-label='Tabs'>
 						{phone.tabs.map((tab) => (

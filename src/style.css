@@ -1042,6 +1042,34 @@
 		overflow: auto;
 	}
 
+	/** iOS search field inside the Work screens (design pages 21-22). */
+	.phone__app-search {
+		display: flex;
+		flex: none;
+		align-items: center;
+		gap: 0.4rem;
+		margin: 0 1rem 0.75rem;
+		padding: 0.4rem 0.7rem;
+		border-radius: 0.6rem;
+		font-size: 0.9375rem;
+		color: rgba(60, 60, 67, 0.6);
+		background-color: rgba(120, 120, 128, 0.12);
+	}
+
+	.phone__app-search input {
+		flex: 1;
+		min-width: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		color: #1c1c1e;
+		outline: none;
+	}
+
+	.phone__app-search-mic {
+		font-size: 0.8125rem;
+	}
+
 	.phone__tabs {
 		display: flex;
 		flex: none;
@@ -1089,12 +1117,28 @@
 		height: 100%;
 	}
 
+	/** The design's phone screens have no sidebar — just the icon grid and the tabs. */
 	.phone__app-body .sidebar {
-		width: 8.5rem;
+		display: none;
 	}
 
 	.phone__app-body .finder__content {
 		padding: 1.25rem;
+	}
+
+	/**
+	 * The desktop places finder icons absolutely (its own free-form layout). The phone screens use a
+	 * plain three-column grid, as the design does.
+	 */
+	.phone__app-body .finder__content ul {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.75rem 0.5rem;
+	}
+
+	.phone__app-body .finder__item {
+		position: static;
+		width: 100%;
 	}
 	/* ---------- Hover-only affordances ---------- */
 	@media (hover: none) {

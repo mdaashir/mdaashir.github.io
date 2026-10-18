@@ -25,7 +25,10 @@ function isFolder(node: TreeNode): node is FolderNode {
 }
 
 /** `initialLocation` lets the phone's Work / About Me tabs open a specific folder. */
-export function Finder({ initialLocation }: { initialLocation?: LocationId } = {}) {
+export function Finder({
+	initialLocation,
+	query,
+}: { initialLocation?: LocationId; query?: string } = {}) {
 	const { windows, open } = useWindows();
 	const { openAt } = useContextMenu();
 	const payload = windows.finder.data;
@@ -51,7 +54,12 @@ export function Finder({ initialLocation }: { initialLocation?: LocationId } = {
 
 	const locationId = available.includes(selected) ? selected : fallback;
 	const location = locations[locationId];
-	const children = folder ? folder.children : (location?.children ?? []);
+	const allChildren = folder ? folder.children : (location?.children ?? []);
+	// The phone's Work screens have a search field (design pages 21-22).
+	const needle = query?.trim().toLowerCase() ?? '';
+	const children = needle
+		? allChildren.filter((node) => node.name.toLowerCase().includes(needle))
+		: allChildren;
 	const viewKey = `${locationId}:${folder?.id ?? 'root'}`;
 
 	// Icons inside the finder can be repositioned within the content area.
