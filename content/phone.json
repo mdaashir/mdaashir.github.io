@@ -1,0 +1,24 @@
+{
+	"wallpaper": "/images/phone/wallpaper.jpg",
+	"search": { "placeholder": "Search" },
+	"grid": [
+		{ "label": "Resume", "icon": "/images/phone/resume.png", "section": "resume" },
+		{ "label": "Calendar", "icon": "/images/phone/calendar.png" },
+		{ "label": "Mail", "icon": "/images/phone/mail.png" },
+		{ "label": "Clock", "icon": "/images/phone/clock.png" },
+		{ "label": "Messages", "icon": "/images/phone/messages.png" },
+		{ "label": "Music", "icon": "/images/phone/music.png" },
+		{ "label": "Settings", "icon": "/images/phone/settings.png" },
+		{ "label": "FaceTime", "icon": "/images/phone/facetime.png" }
+	],
+	"dock": [
+		{ "label": "Finder", "icon": "/images/finder.png", "section": "projects", "location": "work" },
+		{ "label": "Safari", "icon": "/images/safari.png", "section": "articles" },
+		{ "label": "Photos", "icon": "/images/photos.png", "section": "gallery" },
+		{ "label": "Contacts", "icon": "/images/contact.png", "section": "contact" }
+	],
+	"tabs": [
+		{ "label": "Work", "icon": "/icons/work.svg", "section": "projects", "location": "work" },
+		{ "label": "About Me", "icon": "/icons/info.svg", "section": "projects", "location": "about" }
+	]
+}

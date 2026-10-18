@@ -18,6 +18,7 @@ export {
 	interpolate,
 	isSectionEnabled,
 	menu,
+	phone,
 	profile,
 	SECTION_IDS,
 	sectionById,

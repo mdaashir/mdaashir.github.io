@@ -1,5 +1,6 @@
 import desktopFile from '../../content/desktop.json';
 import menuFile from '../../content/menu.json';
+import phoneFile from '../../content/phone.json';
 import profileFile from '../../content/profile.json';
 import siteFile from '../../content/site.json';
 
@@ -7,6 +8,7 @@ import type { WindowId } from '../lib/windows';
 import type {
 	DesktopConfig,
 	MenuConfig,
+	PhoneConfig,
 	ProfileConfig,
 	SectionData,
 	SectionId,
@@ -19,6 +21,7 @@ export const site = siteFile as SiteConfig;
 export const profile = profileFile as ProfileConfig;
 export const menu = menuFile as MenuConfig;
 export const desktop = desktopFile as DesktopConfig;
+export const phone = phoneFile as PhoneConfig;
 
 /** Replaces `{token}` with a value, leaving unknown tokens untouched. */
 export function interpolate(text: string, values: Record<string, string | number>): string {

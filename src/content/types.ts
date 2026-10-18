@@ -106,6 +106,26 @@ export interface DesktopConfig {
 	info: { name: string; subtitle?: string; lines: string[] };
 }
 
+/**
+ * A phone tile, dock icon or tab. `section` is optional: the design's home grid includes iOS system
+ * apps that have no content behind them, so leaving it out makes the tile decorative.
+ */
+export interface PhoneApp {
+	label: string;
+	icon: string;
+	section?: SectionId;
+	/** Finder location to open when the section is the finder. */
+	location?: LocationId;
+}
+
+export interface PhoneConfig {
+	wallpaper: string;
+	search: { placeholder: string };
+	grid: PhoneApp[];
+	dock: PhoneApp[];
+	tabs: PhoneApp[];
+}
+
 /* ---------- Sections ---------- */
 
 export type SectionId =

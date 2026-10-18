@@ -4,7 +4,7 @@ import { act } from 'preact/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Desktop } from '../components/Desktop';
-import { menu, sections } from '../content';
+import { phone } from '../content';
 import { ContextMenuProvider } from '../lib/context-menu';
 import { WindowProvider } from '../lib/window-context';
 
@@ -98,30 +98,40 @@ describe('desktop shell', () => {
 		expect(container.querySelector('.phone-shell')).toBeTruthy();
 	});
 
-	it('mirrors the enabled sections as phone tiles, skipping the archive', () => {
+	it('renders the phone home screen from content/phone.json', () => {
 		const { container } = mount();
 
-		const tiles = [...container.querySelectorAll('.phone__app')].map((node) =>
-			node.textContent?.trim()
+		const grid = [...container.querySelectorAll('.phone__app')].map((node) =>
+			node.getAttribute('aria-label')
 		);
-		// The archive lives inside the finder, so it has no tile of its own.
-		const expected = sections.filter((section) => section.id !== 'archive').map((s) => s.name);
+		const dock = [...container.querySelectorAll('.phone__dock-icon')].map((node) =>
+			node.getAttribute('aria-label')
+		);
 
-		expect(tiles).toEqual(expected);
+		expect(grid).toEqual(phone.grid.map((tile) => tile.label));
+		expect(dock).toEqual(phone.dock.map((tile) => tile.label));
 		expect(container.querySelector('.phone__home-indicator')).toBeTruthy();
+
+		// The design's iOS system icons have no content behind them and must say so.
+		const decorative = [...container.querySelectorAll('.phone__app--decorative')];
+		expect(decorative).toHaveLength(phone.grid.filter((tile) => !tile.section).length);
 	});
 
-	it('gives the phone a three-tab bar that mirrors the menu, not the whole app list', () => {
+	it('opens an app with the iOS nav bar and the two tabs', () => {
 		const { container } = mount();
 
-		const tabLabels = [...container.querySelectorAll('.phone__tab')].map((node) =>
-			node.textContent?.trim()
+		const resume = [...container.querySelectorAll<HTMLElement>('.phone__app')].find(
+			(node) => node.getAttribute('aria-label') === 'Resume'
 		);
+		fireEvent.click(resume!);
 
-		expect(tabLabels).toEqual(menu.links.slice(0, 3).map((link) => link.label));
-		expect(tabLabels).toHaveLength(3);
-		// The home grid still carries every app, so the bar is a shortcut, not the full list.
-		expect(container.querySelectorAll('.phone__app').length).toBeGreaterThan(3);
+		expect(container.querySelector('.phone__app-nav')).toBeTruthy();
+		expect(container.querySelector('.phone__nav-title')?.textContent).toBeTruthy();
+
+		const tabs = [...container.querySelectorAll('.phone__tab span')].map((node) =>
+			node.textContent
+		);
+		expect(tabs).toEqual(phone.tabs.map((tab) => tab.label));
 	});
 
 	it('opens the app menu when a dock icon is long-pressed', () => {

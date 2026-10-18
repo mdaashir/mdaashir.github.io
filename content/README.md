@@ -11,6 +11,7 @@ customise the portfolio — edit these JSON files, run `npm run build`, and the 
 | `profile.json` | Your name, the hero greeting and headline, avatar, and the **About me** folder in the Finder |
 | `menu.json` | The **menu bar** (top): links and status icons — and the **dock** (bottom): which apps appear and in what order |
 | `desktop.json` | Desktop context-menu items, and the file shown by **Get Info** |
+| `phone.json` | The phone home screen: wallpaper, the 4-column icon grid, the four-icon dock, and the in-app tabs |
 | `sections/*.json` | One file per app/window. Filename is the section name — `projects.json` drives the Finder, `gallery.json` drives Gallery, and so on |
 
 ### `site.json` tokens

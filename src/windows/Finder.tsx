@@ -24,11 +24,14 @@ function isFolder(node: TreeNode): node is FolderNode {
 	return node.kind === 'folder';
 }
 
-export function Finder() {
+/** `initialLocation` lets the phone's Work / About Me tabs open a specific folder. */
+export function Finder({ initialLocation }: { initialLocation?: LocationId } = {}) {
 	const { windows, open } = useWindows();
 	const { openAt } = useContextMenu();
 	const payload = windows.finder.data;
-	const [selected, setSelected] = useState<LocationId>(fallback);
+	const [selected, setSelected] = useState<LocationId>(
+		initialLocation && available.includes(initialLocation) ? initialLocation : fallback
+	);
 	const [folder, setFolder] = useState<FolderNode | null>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const draggedRef = useRef(false);
@@ -39,6 +42,12 @@ export function Finder() {
 		setSelected(available.includes(requested) ? requested : fallback);
 		setFolder(null);
 	}, [payload?.location]);
+
+	useEffect(() => {
+		if (!initialLocation || !available.includes(initialLocation)) return;
+		setSelected(initialLocation);
+		setFolder(null);
+	}, [initialLocation]);
 
 	const locationId = available.includes(selected) ? selected : fallback;
 	const location = locations[locationId];

@@ -70,6 +70,7 @@ for the full guide.
 | `profile.json`        | Name, hero greeting/headline, avatar, the About me folder      |
 | `menu.json`           | Menu-bar links and status icons, plus dock order               |
 | `desktop.json`        | Desktop context menus and the Get Info file                    |
+| `phone.json`          | Phone home screen: wallpaper, icon grid, dock, tabs            |
 | `sections/*.json`     | One file per app: projects, articles, gallery, contact, skills, resume, archive |
 
 Delete a file from `content/sections/` (or set `"enabled": false`) and that app disappears from the
