@@ -132,7 +132,18 @@ export function PhoneShell() {
 							aria-label={app.label}
 							aria-disabled={app.section ? undefined : 'true'}
 							onClick={() => open(app)}>
-							<img src={app.icon} alt='' loading='lazy' />
+							<img
+								src={app.icon}
+								alt=''
+								loading='lazy'
+								onError={(event) => {
+									// The hand-authored SVGs are the fallback if a PNG ever fails to load.
+									const image = event.currentTarget;
+									if (image.dataset.fallback) return;
+									image.dataset.fallback = 'true';
+									image.src = image.src.replace(/\.png$/, '.svg');
+								}}
+							/>
 							<span>{app.label}</span>
 						</button>
 					))}
