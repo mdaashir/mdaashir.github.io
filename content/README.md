@@ -12,12 +12,12 @@ customise the portfolio — edit these JSON files, run `npm run build`, and the 
 | `menu.json` | The **menu bar** (top): links and status icons — and the **dock** (bottom): which apps appear and in what order |
 | `desktop.json` | Desktop context-menu items, and the file shown by **Get Info** |
 | `phone.json` | The phone home screen: wallpaper, the 4-column icon grid, the four-icon dock, and the in-app tabs |
+| `sections/*.json` | One file per app/window. Filename is the section name — `projects.json` drives the Finder, `gallery.json` drives Gallery, and so on |
 
 Phone icons: `resume`, `mail`, `clock`, `messages`, `music` and `facetime` are iOS 18 assets from the
 open [iOSIconPack](https://github.com/SysAdminDoc/iOSIconPack) project; `calendar` and `settings` are
 hand-authored SVGs (`public/images/phone/*.svg`) because that pack's versions of those two are
 mislabelled. Any icon can be swapped by changing its path here.
-| `sections/*.json` | One file per app/window. Filename is the section name — `projects.json` drives the Finder, `gallery.json` drives Gallery, and so on |
 
 ### `site.json` tokens
 
