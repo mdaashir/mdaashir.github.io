@@ -19,21 +19,21 @@
 		"logo": "/images/logo.svg"
 	},
 	"menubar": {
-		"wifi": "/icons/wifi.svg",
-		"search": "/icons/search.svg",
-		"user": "/icons/user.svg",
-		"mode": "/icons/mode.svg"
+		"wifi": "wifi",
+		"search": "search",
+		"user": "user",
+		"mode": "moon"
 	},
 	"sidebar": {
-		"work": "/icons/work.svg",
-		"info": "/icons/info.svg",
-		"file": "/icons/file.svg",
-		"trash": "/icons/trash.svg"
+		"work": "folder",
+		"info": "info",
+		"file": "file",
+		"trash": "trash"
 	},
 	"social": {
-		"github": "/icons/social/github.svg",
-		"x": "/icons/social/x.svg",
+		"github": "github",
+		"x": "x",
 		"linkedin": "/icons/linkedin.svg",
-		"email": "/icons/social/gmail.svg"
+		"email": "gmail"
 	}
 }

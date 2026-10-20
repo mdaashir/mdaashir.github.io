@@ -1,20 +1,59 @@
 /**
  * The icon registry.
  *
- * Every icon path in the project is declared in `content/icons.json`, addressed by role
- * (`apps.finder`, `files.pdf`, `menubar.wifi`, …). Components and content never hardcode a path:
- * they ask for a role, and the loader resolves it. Swapping an icon is a one-line JSON edit.
+ * Icon artwork is bundled at build time from icon packages — nothing is downloaded and no asset
+ * files need keeping in sync. `content/icons.json` names the icon for each role
+ * (`menubar.wifi`, `social.github`, …), so changing an icon is a JSON edit.
  */
+import fileText from 'lucide-static/icons/file-text.svg?raw';
+import folder from 'lucide-static/icons/folder.svg?raw';
+import info from 'lucide-static/icons/info.svg?raw';
+import moon from 'lucide-static/icons/moon.svg?raw';
+import search from 'lucide-static/icons/search.svg?raw';
+import trash from 'lucide-static/icons/trash-2.svg?raw';
+import user from 'lucide-static/icons/user.svg?raw';
+import wifi from 'lucide-static/icons/wifi.svg?raw';
+
+import { siGithub, siGmail, siX } from 'simple-icons';
+
 import iconFile from '../../content/icons.json';
+
+const asDataUri = (svg: string): string =>
+	`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+
+const brand = (icon: { path: string }, fill = '#fff'): string =>
+	asDataUri(
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="${fill}" d="${icon.path}"/></svg>`
+	);
+
+/** Every icon available by name, bundled into the bundle rather than fetched. */
+export const inlineIcons: Record<string, string> = {
+	wifi: asDataUri(wifi),
+	search: asDataUri(search),
+	user: asDataUri(user),
+	moon: asDataUri(moon),
+	folder: asDataUri(folder),
+	file: asDataUri(fileText),
+	info: asDataUri(info),
+	trash: asDataUri(trash),
+	github: brand(siGithub),
+	x: brand(siX),
+	gmail: brand(siGmail),
+};
 
 type IconGroups = Record<string, Record<string, string>>;
 
 const groups = iconFile as IconGroups;
 
-/** Flat role → path map, e.g. `{ 'files.pdf': '/images/pdf.png' }`. */
+/** A configured value is either an icon name (bundled) or a path to an image in `public/`. */
+function resolveValue(value: string): string {
+	return inlineIcons[value] ?? value;
+}
+
+/** Flat role → source map, e.g. `{ 'menubar.wifi': 'data:image/svg+xml,…' }`. */
 export const icons: Record<string, string> = Object.fromEntries(
 	Object.entries(groups).flatMap(([group, entries]) =>
-		Object.entries(entries).map(([name, path]) => [`${group}.${name}`, path])
+		Object.entries(entries).map(([name, value]) => [`${group}.${name}`, resolveValue(value)])
 	)
 );
 
@@ -22,19 +61,20 @@ export const icons: Record<string, string> = Object.fromEntries(
 export const iconRoles: string[] = Object.keys(icons).sort();
 
 /**
- * Resolves an icon role to its path. Anything that is not a known role (already a path, or empty)
- * is returned unchanged, so both forms work and a missing role never produces a broken image.
+ * Resolves a role to its source. Anything that is not a role (already a path or a data URI) is
+ * returned unchanged, so a missing role never produces a broken image.
  */
 export function icon(roleOrPath: string): string {
-	return icons[roleOrPath] ?? roleOrPath;
+	if (roleOrPath in icons) return icons[roleOrPath];
+	return resolveValue(roleOrPath);
 }
 
 /**
- * Walks loaded content and replaces any string that names a role with its path. Runs once at load
- * time so components keep rendering plain paths and never need to know about the registry.
+ * Walks loaded content and resolves any string that is a role name or a bundled icon name. Runs once
+ * at load time so components keep rendering plain sources and never need to know about the registry.
  */
 export function resolveIcons<T>(value: T): T {
-	if (typeof value === 'string') return (icons[value] ?? value) as T;
+	if (typeof value === 'string') return (icon(value) as unknown) as T;
 	if (Array.isArray(value)) return value.map((entry) => resolveIcons(entry)) as T;
 	if (value && typeof value === 'object') {
 		return Object.fromEntries(
