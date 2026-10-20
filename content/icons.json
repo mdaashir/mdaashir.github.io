@@ -31,9 +31,9 @@
 		"trash": "/icons/trash.svg"
 	},
 	"social": {
-		"github": "/icons/github.svg",
-		"x": "/icons/twitter.svg",
+		"github": "/icons/social/github.svg",
+		"x": "/icons/social/x.svg",
 		"linkedin": "/icons/linkedin.svg",
-		"email": "/icons/atom.svg"
+		"email": "/icons/social/gmail.svg"
 	}
 }
