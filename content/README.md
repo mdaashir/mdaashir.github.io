@@ -20,6 +20,10 @@ open [iOSIconPack](https://github.com/SysAdminDoc/iOSIconPack) project; `calenda
 hand-authored SVGs (`public/images/phone/*.svg`) because that pack's versions of those two are
 mislabelled. Any icon can be swapped by changing its path here.
 
+Icon artwork is downloaded into `public/` by `node tools/download-icons.mjs` — nothing is imported
+at build time, so the site always serves local files. Brand marks (GitHub, X, Gmail) come from the
+Simple Icons set; the figures above are the phone icons.
+
 ### `site.json` tokens
 
 `{name}` is replaced with `site.name` wherever it appears, e.g. the title template
