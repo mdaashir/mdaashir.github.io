@@ -1,7 +1,7 @@
 {
 	"enabled": true,
 	"title": "Gallery",
-	"icon": "/images/photos.png",
+	"icon": "apps.photos",
 	"sidebarHeading": "Photos",
 	"albums": [
 		{
@@ -14,7 +14,7 @@
 		},
 		{
 			"title": "Places",
-			"icon": "/icons/file.svg"
+			"icon": "sidebar.file"
 		},
 		{
 			"title": "People",

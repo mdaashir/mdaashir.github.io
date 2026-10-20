@@ -5,7 +5,7 @@
 	"avatar": "/images/adrian.jpg",
 	"about": {
 		"enabled": true,
-		"location": { "name": "About me", "icon": "/icons/info.svg" },
+		"location": { "name": "About me", "icon": "sidebar.info" },
 		"title": "Meet the developer behind the code",
 		"lines": [
 			"Hey! I build interfaces that feel fast, obvious and a little bit delightful.",

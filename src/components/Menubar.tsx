@@ -2,7 +2,7 @@ import { useLocation } from 'preact-iso';
 import { useEffect, useState } from 'preact/hooks';
 
 import { Calendar } from './Calendar';
-import { hasSection, menu, site } from '../content';
+import { hasSection, icon, menu, site } from '../content';
 import { openSection } from '../lib/open-section';
 import { applyTheme, readTheme, toggleTheme, type Theme } from '../lib/theme';
 import { useWindows } from '../lib/window-context';
@@ -59,7 +59,7 @@ export function Menubar() {
 						aria-label={menu.closeAllLabel}
 						title={menu.closeAllLabel}
 						onClick={closeAllWindows}>
-						<img src='/images/logo.svg' alt='' class='h-4 w-4 dark:invert' />
+						<img src={icon('brand.logo')} alt='' class='h-4 w-4 dark:invert' />
 					</button>
 					<button
 						type='button'

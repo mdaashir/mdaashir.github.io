@@ -2,7 +2,7 @@
 	"enabled": true,
 	"title": "Tech Stack",
 	"name": "Skills",
-	"icon": "/images/terminal.png",
+	"icon": "apps.terminal",
 	"prompt": "@aashir %",
 	"command": "show tech stack",
 	"columns": ["Category", "Technologies"],

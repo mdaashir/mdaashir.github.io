@@ -12,13 +12,13 @@
 		{ "label": "FaceTime", "icon": "/images/phone/facetime.png" }
 	],
 	"dock": [
-		{ "label": "Finder", "icon": "/images/finder.png", "section": "projects", "location": "work" },
-		{ "label": "Safari", "icon": "/images/safari.png", "section": "articles" },
-		{ "label": "Photos", "icon": "/images/photos.png", "section": "gallery" },
-		{ "label": "Contacts", "icon": "/images/contact.png", "section": "contact" }
+		{ "label": "Finder", "icon": "apps.finder", "section": "projects", "location": "work" },
+		{ "label": "Safari", "icon": "apps.safari", "section": "articles" },
+		{ "label": "Photos", "icon": "apps.photos", "section": "gallery" },
+		{ "label": "Contacts", "icon": "apps.contacts", "section": "contact" }
 	],
 	"tabs": [
-		{ "label": "Work", "icon": "/icons/work.svg", "section": "projects", "location": "work" },
-		{ "label": "About Me", "icon": "/icons/info.svg", "section": "projects", "location": "about" }
+		{ "label": "Work", "icon": "sidebar.work", "section": "projects", "location": "work" },
+		{ "label": "About Me", "icon": "sidebar.info", "section": "projects", "location": "about" }
 	]
 }

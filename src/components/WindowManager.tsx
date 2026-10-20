@@ -1,5 +1,5 @@
 import { Window } from './Window';
-import { getSection, hasSection, locations } from '../content';
+import { getSection, hasSection, icon, locations } from '../content';
 import { useWindows } from '../lib/window-context';
 import { Contact } from '../windows/Contact';
 import { Finder } from '../windows/Finder';
@@ -30,7 +30,7 @@ export function WindowManager() {
 						className='finder'
 						showTitle={false}
 						headerRight={
-							<img src='/icons/search.svg' alt='' class='h-5 w-5 opacity-70 dark:invert' />
+							<img src={icon('menubar.search')} alt='' class='h-5 w-5 opacity-70 dark:invert' />
 						}>
 						<Finder />
 					</Window>

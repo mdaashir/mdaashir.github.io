@@ -1,8 +1,8 @@
 {
 	"enabled": true,
 	"title": "Portfolio",
-	"icon": "/images/finder.png",
-	"location": { "name": "Work", "icon": "/icons/work.svg" },
+	"icon": "apps.finder",
+	"location": { "name": "Work", "icon": "sidebar.work" },
 	"sidebarHeading": "Favorites",
 	"empty": "Nothing here yet.",
 	"projects": [

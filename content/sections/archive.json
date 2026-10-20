@@ -1,8 +1,8 @@
 {
 	"enabled": true,
 	"title": "Archive",
-	"icon": "/images/trash.png",
-	"location": { "name": "Trash", "icon": "/icons/trash.svg" },
+	"icon": "apps.trash",
+	"location": { "name": "Trash", "icon": "sidebar.trash" },
 	"items": [
 		{ "name": "trash1.png", "src": "/images/trash-1.png", "position": "top-10 left-10" },
 		{ "name": "trash2.png", "src": "/images/trash-2.png", "position": "top-40 left-80" }

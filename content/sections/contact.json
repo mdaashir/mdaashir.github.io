@@ -2,32 +2,32 @@
 	"enabled": true,
 	"title": "Contact Me",
 	"name": "Contact",
-	"icon": "/images/contact.png",
+	"icon": "apps.contacts",
 	"heading": "Let’s connect",
 	"blurb": "Got an idea, a bug to squash, or just want to talk tech? I’m in.",
 	"avatar": "/images/adrian.jpg",
 	"links": [
 		{
 			"text": "GitHub",
-			"icon": "/icons/github.svg",
+			"icon": "social.github",
 			"bg": "#f4656b",
 			"link": "https://github.com/mdaashir"
 		},
 		{
 			"text": "Twitter/X",
-			"icon": "/icons/twitter.svg",
+			"icon": "social.x",
 			"bg": "#ff866b",
 			"link": "https://x.com/"
 		},
 		{
 			"text": "LinkedIn",
-			"icon": "/icons/linkedin.svg",
+			"icon": "social.linkedin",
 			"bg": "#05b6f6",
 			"link": "https://www.linkedin.com/"
 		},
 		{
 			"text": "Email",
-			"icon": "/icons/atom.svg",
+			"icon": "social.email",
 			"bg": "#4bcb63",
 			"link": "mailto:s.mohamedaashir@gmail.com"
 		}

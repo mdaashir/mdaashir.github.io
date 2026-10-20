@@ -1,7 +1,7 @@
 {
 	"enabled": true,
 	"title": "Articles",
-	"icon": "/images/safari.png",
+	"icon": "apps.safari",
 	"url": "aashir.dev/articles",
 	"heading": "My Developer Blog",
 	"headingColor": "#db2777",

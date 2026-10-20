@@ -1,0 +1,39 @@
+{
+	"apps": {
+		"finder": "/images/finder.png",
+		"safari": "/images/safari.png",
+		"photos": "/images/photos.png",
+		"contacts": "/images/contact.png",
+		"terminal": "/images/terminal.png",
+		"trash": "/images/trash.png"
+	},
+	"files": {
+		"folder": "/images/folder.png",
+		"txt": "/images/txt.png",
+		"image": "/images/image.png",
+		"pdf": "/images/pdf.png",
+		"plain": "/images/plain.png",
+		"figma": "/images/figma.png"
+	},
+	"brand": {
+		"logo": "/images/logo.svg"
+	},
+	"menubar": {
+		"wifi": "/icons/wifi.svg",
+		"search": "/icons/search.svg",
+		"user": "/icons/user.svg",
+		"mode": "/icons/mode.svg"
+	},
+	"sidebar": {
+		"work": "/icons/work.svg",
+		"info": "/icons/info.svg",
+		"file": "/icons/file.svg",
+		"trash": "/icons/trash.svg"
+	},
+	"social": {
+		"github": "/icons/github.svg",
+		"x": "/icons/twitter.svg",
+		"linkedin": "/icons/linkedin.svg",
+		"email": "/icons/atom.svg"
+	}
+}

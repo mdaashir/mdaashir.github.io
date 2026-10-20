@@ -4,6 +4,7 @@
  * Components import from here — never from a JSON file directly — so the skip rules live in one place.
  */
 import { buildLocations, buildShortcuts } from './derive';
+import { icon } from './icons';
 import { desktop } from './loader';
 import type { FileNode } from './types';
 
@@ -30,6 +31,8 @@ export {
 
 export type { SectionMeta } from './loader';
 
+export { icon, icons, iconRoles } from './icons';
+
 export { LOCATION_ORDER } from './derive';
 
 /** The Finder filesystem, built from whichever sections have content. */
@@ -42,7 +45,7 @@ export const shortcuts = buildShortcuts();
 export const desktopInfoFile: FileNode = {
 	id: 'desktop-info',
 	name: desktop.info.name,
-	icon: '/images/txt.png',
+	icon: icon('files.txt'),
 	kind: 'file',
 	fileType: 'txt',
 	subtitle: desktop.info.subtitle,

@@ -5,6 +5,7 @@ import profileFile from '../../content/profile.json';
 import siteFile from '../../content/site.json';
 
 import type { WindowId } from '../lib/windows';
+import { resolveIcons } from './icons';
 import type {
 	DesktopConfig,
 	MenuConfig,
@@ -17,11 +18,11 @@ import type {
 
 /* ---------- Shell files ---------- */
 
-export const site = siteFile as SiteConfig;
-export const profile = profileFile as ProfileConfig;
-export const menu = menuFile as MenuConfig;
-export const desktop = desktopFile as DesktopConfig;
-export const phone = phoneFile as PhoneConfig;
+export const site = resolveIcons(siteFile as SiteConfig);
+export const profile = resolveIcons(profileFile as ProfileConfig);
+export const menu = resolveIcons(menuFile as MenuConfig);
+export const desktop = resolveIcons(desktopFile as DesktopConfig);
+export const phone = resolveIcons(phoneFile as PhoneConfig);
 
 /** Replaces `{token}` with a value, leaving unknown tokens untouched. */
 export function interpolate(text: string, values: Record<string, string | number>): string {
@@ -80,7 +81,7 @@ export const sectionData: Sections = {};
 for (const [path, data] of Object.entries(sectionModules)) {
 	const id = sectionIdFromPath(path);
 	// The glob erases the per-file type, so the assignment needs widening back.
-	if (id) (sectionData as Record<string, unknown>)[id] = data;
+	if (id) (sectionData as Record<string, unknown>)[id] = resolveIcons(data);
 }
 
 /** The collection that must be non-empty for a section to count as present. */

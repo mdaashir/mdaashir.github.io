@@ -5,11 +5,11 @@
 		{ "label": "Resume", "section": "resume" }
 	],
 	"statusIcons": [
-		{ "icon": "/icons/wifi.svg", "label": "Wi-Fi" },
-		{ "icon": "/icons/search.svg", "label": "Search" },
-		{ "icon": "/icons/user.svg", "label": "Account" }
+		{ "icon": "menubar.wifi", "label": "Wi-Fi" },
+		{ "icon": "menubar.search", "label": "Search" },
+		{ "icon": "menubar.user", "label": "Account" }
 	],
-	"appearanceToggle": { "icon": "/icons/mode.svg", "label": "Toggle appearance" },
+	"appearanceToggle": { "icon": "menubar.mode", "label": "Toggle appearance" },
 	"closeAllLabel": "Close all windows",
 	"dock": ["projects", "articles", "gallery", "contact", "skills", "archive"]
 }

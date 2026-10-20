@@ -1,3 +1,4 @@
+import { icon } from './icons';
 import { hasSection, isSectionEnabled, profile, sectionData } from './loader';
 import type {
 	DesktopShortcut,
@@ -10,18 +11,18 @@ import type {
 
 /** Icons and in-window placement for the file nodes generated from each project. */
 const FILE_ICONS = {
-	txt: '/images/txt.png',
-	url: '/images/safari.png',
-	img: '/images/image.png',
-	fig: '/images/plain.png',
-	pdf: '/images/pdf.png',
+	txt: icon('files.txt'),
+	url: icon('apps.safari'),
+	img: icon('files.image'),
+	fig: icon('files.plain'),
+	pdf: icon('files.pdf'),
 };
 
 const FILE_LAYOUT = ['top-5 left-10', 'top-10 right-20', 'top-52 right-80', 'top-60 right-20'];
 const FOLDER_LAYOUT = ['top-10 left-5', 'top-52 right-80', 'top-10 left-80'];
 const DESKTOP_LAYOUT = ['top-[5vh] left-5', 'top-[20vh] left-7', 'top-[33vh] left-7'];
 
-const FOLDER_ICON = '/images/folder.png';
+const FOLDER_ICON = icon('files.folder');
 
 function file(node: Omit<FileNode, 'kind' | 'position'> & { position?: string }): FileNode {
 	return { kind: 'file', ...node };
