@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import { phone, profile, sectionById, type LocationId, type PhoneApp, type SectionId } from '../content';
+import { phone, profile, sectionById, site, type LocationId, type PhoneApp, type SectionId } from '../content';
 import { Contact } from '../windows/Contact';
 import { Finder } from '../windows/Finder';
 import { Photos } from '../windows/Photos';
@@ -123,6 +123,14 @@ export function PhoneShell() {
 			<StatusBar />
 
 			<div class='phone__home'>
+				{/* Names the site, so a visitor landing on a phone knows this is a portfolio. */}
+				{site.brand && (
+					<div class='phone__identity'>
+						<strong>{site.brand}</strong>
+						<span>{site.name}</span>
+					</div>
+				)}
+
 				<div class='phone__grid'>
 					{grid.map((app) => (
 						<button

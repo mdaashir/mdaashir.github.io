@@ -480,12 +480,12 @@
 		padding: 1.25rem;
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
-		color: var(--color-terminal);
+		color: var(--color-terminal-dark);
 	}
 
-	/* The darker panel needs the lighter green; using the light one here fails contrast. */
-	.dark .terminal__body {
-		color: var(--color-terminal-dark);
+	/* A terminal is dark in both appearances, as on macOS — the light green is the readable one here. */
+	.terminal .window-body {
+		background: #1e1e1e;
 	}
 
 	.terminal__row {
@@ -897,6 +897,31 @@
 		padding: 0.5rem 1.25rem 0;
 		overflow-y: auto;
 		touch-action: pan-y;
+	}
+
+	/** The home screen names the site, so a phone visitor knows what they opened. */
+	.phone__identity {
+		display: grid;
+		gap: 0.1rem;
+		align-self: center;
+		margin-top: 0.35rem;
+		padding: 0.45rem 1rem;
+		border-radius: 1rem;
+		text-align: center;
+		color: #1c1c1e;
+		background: rgb(255 255 255 / 0.45);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+	}
+
+	.phone__identity strong {
+		font-size: 0.9375rem;
+		font-weight: 600;
+	}
+
+	.phone__identity span {
+		font-size: 0.6875rem;
+		color: rgb(60 60 67 / 0.75);
 	}
 
 	/** Four columns, like the design's home grid. */
