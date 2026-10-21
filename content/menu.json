@@ -1,15 +1,10 @@
 {
-	"links": [
-		{ "label": "Projects", "section": "projects" },
-		{ "label": "Contact", "section": "contact" },
-		{ "label": "Resume", "section": "resume" }
-	],
+	"links": [],
 	"statusIcons": [
 		{ "icon": "menubar.wifi", "label": "Wi-Fi" },
-		{ "icon": "menubar.search", "label": "Search" },
 		{ "icon": "menubar.user", "label": "Account" }
 	],
 	"appearanceToggle": { "icon": "menubar.mode", "label": "Toggle appearance" },
 	"closeAllLabel": "Close all windows",
-	"dock": ["projects", "articles", "gallery", "contact", "skills", "archive"]
+	"dock": []
 }

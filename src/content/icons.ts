@@ -50,10 +50,23 @@ function resolveValue(value: string): string {
 	return inlineIcons[value] ?? value;
 }
 
+/**
+ * Content paths are written as `/images/…`, but a docs site is served from `/<repo>/`. Prefixing
+ * them with Vite's base keeps every asset resolving on a project Pages site; on the root site the
+ * base is `/`, so nothing changes.
+ */
+function withBase(path: string): string {
+	if (!path.startsWith('/') || path.startsWith('//')) return path;
+	return `${import.meta.env.BASE_URL}${path.slice(1)}`;
+}
+
 /** Flat role → source map, e.g. `{ 'menubar.wifi': 'data:image/svg+xml,…' }`. */
 export const icons: Record<string, string> = Object.fromEntries(
 	Object.entries(groups).flatMap(([group, entries]) =>
-		Object.entries(entries).map(([name, value]) => [`${group}.${name}`, resolveValue(value)])
+		Object.entries(entries).map(([name, value]) => [
+			`${group}.${name}`,
+			withBase(resolveValue(value)),
+		])
 	)
 );
 
@@ -74,7 +87,7 @@ export function icon(roleOrPath: string): string {
  * at load time so components keep rendering plain sources and never need to know about the registry.
  */
 export function resolveIcons<T>(value: T): T {
-	if (typeof value === 'string') return (icon(value) as unknown) as T;
+	if (typeof value === 'string') return withBase(icon(value)) as unknown as T;
 	if (Array.isArray(value)) return value.map((entry) => resolveIcons(entry)) as T;
 	if (value && typeof value === 'object') {
 		return Object.fromEntries(

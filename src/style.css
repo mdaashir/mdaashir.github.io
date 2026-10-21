@@ -604,6 +604,30 @@
 		}
 	}
 
+	/** A docs site has no phone home screen: keep the reader at every width. */
+	@media (max-width: 39.99rem) {
+		.phone-shell {
+			display: none;
+		}
+
+		.desktop-shell {
+			display: block;
+		}
+
+		.welcome,
+		.dock-container {
+			display: none;
+		}
+
+		.docs {
+			width: 100vw;
+			height: calc(100dvh - 3rem);
+			top: 3rem;
+			left: 0;
+			border-radius: 0;
+		}
+	}
+
 	/* ---------- Terminal ---------- */
 	.terminal {
 		width: min(30rem, 92vw);

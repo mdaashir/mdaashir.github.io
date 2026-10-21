@@ -1,34 +1,17 @@
 {
 	"contextMenu": [
-		{ "label": "New Folder", "disabled": true },
-		{ "separator": true },
-		{ "label": "Open Projects", "action": "open", "section": "projects" },
-		{ "label": "Show Skills", "action": "open", "section": "skills" },
 		{ "label": "Get Info", "action": "info" },
 		{ "separator": true },
-		{ "label": "Change Wallpaper", "hint": "⌘W", "disabled": true }
+		{ "label": "Change Wallpaper", "disabled": true }
 	],
 	"info": {
 		"name": "Desktop.txt",
-		"subtitle": "macOS Portfolio",
+		"subtitle": "Project documentation",
 		"lines": [
-			"Double-click a desktop icon to open it — icons can be dragged anywhere.",
-			"Right-click for options, and use the dock along the bottom."
+			"Choose a section from the sidebar to read the documentation.",
+			"Press ⌘ and click a section name to open it in a new tab."
 		]
 	},
-	"iconContextMenu": [
-		{ "label": "Open", "action": "open" },
-		{ "label": "Open in New Window", "disabled": true },
-		{ "separator": true },
-		{ "label": "Get Info", "hint": "⌘I", "action": "info" },
-		{ "label": "Rename", "disabled": true },
-		{ "separator": true },
-		{ "label": "Move to Trash", "hint": "⌘⌫", "disabled": true }
-	],
-	"dockContextMenu": [
-		{ "label": "Open", "action": "open" },
-		{ "separator": true },
-		{ "label": "Show in Finder", "disabled": true },
-		{ "label": "Quit", "action": "quit" }
-	]
+	"iconContextMenu": [{ "label": "Get Info", "action": "info" }],
+	"dockContextMenu": [{ "label": "Open", "action": "open" }]
 }

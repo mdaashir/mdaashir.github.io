@@ -19,6 +19,9 @@ export function Dock() {
 	const { openAt } = useContextMenu();
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	/** A docs site has no apps to dock; render nothing rather than an empty shelf. */
+	if (dockSections.length === 0) return null;
+
 	const menuFor = (section: SectionMeta) =>
 		contentMenu(desktop.dockContextMenu, (item) => {
 			switch (item.action) {

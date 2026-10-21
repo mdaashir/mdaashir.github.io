@@ -1,9 +1,9 @@
 {
-	"name": "Mohamed Aashir S",
-	"brand": "Aashir's Portfolio",
-	"url": "https://mdaashir.github.io",
-	"title": "{name} — macOS Portfolio",
-	"description": "An interactive macOS-style portfolio for Mohamed Aashir S — browse projects, articles, gallery and skills through a draggable desktop interface.",
+	"name": "SnapCast",
+	"brand": "SnapCast Docs",
+	"url": "https://mdaashir.github.io/SnapCast",
+	"title": "{name} — Docs",
+	"description": "Documentation for SnapCast, presented in the same macOS window theme as the portfolio.",
 	"notFound": {
 		"title": "Page not found — {name}",
 		"description": "The page you were looking for could not be found."
@@ -16,7 +16,7 @@
 		"noFileSelected": "No file selected.",
 		"noImageSelected": "No image selected.",
 		"notFoundHeading": "Page not found",
-		"notFoundBody": "That route doesn't exist on this desktop.",
-		"notFoundBack": "Back to the desktop"
+		"notFoundBody": "That route doesn't exist in this documentation.",
+		"notFoundBack": "Back to the docs"
 	}
 }

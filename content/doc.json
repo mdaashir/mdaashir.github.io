@@ -1,8 +1,13 @@
 {
-	"enabled": false,
-	"title": "Project Docs",
+	"enabled": true,
+	"title": "SnapCast Documentation",
 	"name": "Docs",
-	"subtitle": "Documentation",
+	"subtitle": "Everything you need to run and extend SnapCast.",
+	"repo": "https://github.com/mdaashir/SnapCast",
 	"sidebarHeading": "Documentation",
-	"sections": []
+	"sections": [
+		{ "id": "overview", "title": "Overview", "file": "README.md", "icon": "sidebar.file" },
+		{ "id": "setup", "title": "Getting started", "file": "setup.md", "icon": "sidebar.work" },
+		{ "id": "api", "title": "API", "file": "api.md", "icon": "sidebar.info" }
+	]
 }
