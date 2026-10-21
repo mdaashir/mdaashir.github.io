@@ -1,7 +1,8 @@
 import { Window } from './Window';
-import { getSection, hasSection, icon, locations } from '../content';
+import { doc, getSection, hasDoc, hasSection, icon, locations } from '../content';
 import { useWindows } from '../lib/window-context';
 import { Contact } from '../windows/Contact';
+import { Docs } from '../windows/Docs';
 import { Finder } from '../windows/Finder';
 import { ImgFile } from '../windows/ImgFile';
 import { Photos } from '../windows/Photos';
@@ -70,6 +71,13 @@ export function WindowManager() {
 			{hasSection('resume') && (
 				<Window id='resume' title={getSection('resume')?.title ?? 'Resume'} className='resume'>
 					<Resume />
+				</Window>
+			)}
+
+			{/* A documentation site is nothing but this reader, so it opens straight away. */}
+			{hasDoc && (
+				<Window id='docs' title={doc.title} className='docs'>
+					<Docs />
 				</Window>
 			)}
 		</>

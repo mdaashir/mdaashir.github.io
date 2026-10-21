@@ -8,7 +8,8 @@ export type WindowId =
 	| 'terminal'
 	| 'resume'
 	| 'txtfile'
-	| 'imgfile';
+	| 'imgfile'
+	| 'docs';
 
 export interface WindowPayload {
 	location?: LocationId;
@@ -40,6 +41,8 @@ export const WINDOW_CONFIG: Record<WindowId, WindowState> = {
 	terminal: closed(),
 	txtfile: closed(),
 	imgfile: closed(),
+	/** Documentation sites open their reader immediately; they have nothing else on the desktop. */
+	docs: { isOpen: true, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export const WINDOW_IDS = Object.keys(WINDOW_CONFIG) as WindowId[];

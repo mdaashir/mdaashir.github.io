@@ -67,5 +67,6 @@ export default defineConfig({
 	build: {
 		outDir: 'dist',
 	},
-	base: '/',
+	/** A project Pages site is served from `/<repo>/`; the deploy workflow sets PAGES_BASE. */
+	base: process.env.PAGES_BASE ?? '/',
 });

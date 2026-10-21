@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"gsap": "^3.15.0",
+		"marked": "^18.1.1",
 		"pdfjs-dist": "^6.4.299",
 		"preact": "^10.29.8",
 		"preact-iso": "^2.9.2",

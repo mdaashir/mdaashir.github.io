@@ -33,6 +33,8 @@ export type { SectionMeta } from './loader';
 
 export { icon, icons, iconRoles } from './icons';
 
+export * from './doc';
+
 export { LOCATION_ORDER } from './derive';
 
 /** The Finder filesystem, built from whichever sections have content. */
