@@ -622,12 +622,24 @@
 		padding: 1.25rem;
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
-		color: var(--color-terminal-dark);
+		color: #1c1c1e;
 	}
 
-	/* A terminal is dark in both appearances, as on macOS — the light green is the readable one here. */
-	.terminal .window-body {
-		background: #1e1e1e;
+	.dark .terminal__body {
+		color: #e8e8ed;
+	}
+
+	/** Green marks, plain text; the terminal follows the appearance like the rest of the shell. */
+	.terminal__list li > span:first-child,
+	.terminal__list li > span:nth-child(2),
+	.terminal__footnote {
+		color: #00713c;
+	}
+
+	.dark .terminal__list li > span:first-child,
+	.dark .terminal__list li > span:nth-child(2),
+	.dark .terminal__footnote {
+		color: #2dd987;
 	}
 
 		/** Gallery tiles open in the viewer, so they read as clickable. */
