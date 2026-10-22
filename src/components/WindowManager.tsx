@@ -34,14 +34,26 @@ function HeaderIcon({ label, children }: { label: string; children: ComponentChi
 
 function DownloadAction({ href }: { href?: string }) {
 	if (!href) return null;
+	/** Downloading from a button keeps the file out of the prerender crawler. */
+	const download = () => {
+		const anchor = document.createElement('a');
+		anchor.href = href;
+		anchor.download = href.split('/').pop() ?? 'download';
+		anchor.click();
+	};
 	return (
-		<a href={href} download aria-label='Download' title='Download' class='text-label-3'>
+		<button
+			type='button'
+			onClick={download}
+			aria-label='Download'
+			title='Download'
+			class='text-label-3'>
 			<HeaderIcon label='Download'>
 				<path d='M12 4v10' />
 				<path d='M8 10l4 4 4-4' />
 				<path d='M5 19h14' />
 			</HeaderIcon>
-		</a>
+		</button>
 	);
 }
 
