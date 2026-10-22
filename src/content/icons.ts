@@ -26,6 +26,9 @@ const brand = (icon: { path: string }, fill = '#fff'): string =>
 		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="${fill}" d="${icon.path}"/></svg>`
 	);
 
+/** macOS tints sidebar glyphs with the accent colour. */
+const accent = (svg: string): string => asDataUri(svg.replaceAll('currentColor', '#007AFF'));
+
 /** Every icon available by name, bundled into the bundle rather than fetched. */
 export const inlineIcons: Record<string, string> = {
 	wifi: asDataUri(wifi),
@@ -39,6 +42,10 @@ export const inlineIcons: Record<string, string> = {
 	github: brand(siGithub),
 	x: brand(siX),
 	gmail: brand(siGmail),
+	folderBlue: accent(folder),
+	fileBlue: accent(fileText),
+	infoBlue: accent(info),
+	trashBlue: accent(trash),
 };
 
 type IconGroups = Record<string, Record<string, string>>;

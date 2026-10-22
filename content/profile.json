@@ -1,7 +1,10 @@
 {
 	"name": "Aashir",
 	"greeting": "Hey, I'm Aashir!",
+	"welcome": "welcome to my",
 	"headline": "portfolio.",
+	"headlineFont": "\"Playfair Display\", Georgia, serif",
+	"headlineItalic": true,
 	"avatar": "/images/adrian.jpg",
 	"about": {
 		"enabled": true,

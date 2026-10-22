@@ -234,6 +234,13 @@
 	.hero-letter {
 		display: inline-block;
 		will-change: font-variation-settings, transform;
+		transform-origin: center;
+		transition: transform 90ms ease-out;
+	}
+
+	/** The second phrase of the greeting, quieter than the name. */
+	.hero-welcome {
+		opacity: 0.72;
 	}
 
 	/* ---------- Dock ---------- */
@@ -623,6 +630,17 @@
 		background: #1e1e1e;
 	}
 
+		/** Gallery tiles open in the viewer, so they read as clickable. */
+	.photos__grid img {
+		cursor: var(--cursor-hand);
+	}
+
+	/** The prompt and column headings are shell text; the rows carry the terminal green. */
+	.terminal__body > p:first-of-type,
+	.terminal__row {
+		color: var(--color-label);
+	}
+
 	.terminal__row {
 		display: flex;
 		align-items: center;
@@ -674,6 +692,36 @@
 		background-color: rgba(120, 120, 128, 0.12);
 		font-size: 0.75rem;
 		color: var(--color-label-2);
+	}
+
+	/** Browser toolbar controls: icon buttons and the wide URL field. */
+	.safari__tool {
+		display: grid;
+		place-items: center;
+		width: 1.75rem;
+		height: 1.75rem;
+		flex: none;
+		border-radius: 0.375rem;
+		color: var(--color-label-2);
+	}
+
+	.safari__tool:hover:not(:disabled) {
+		background-color: rgba(120, 120, 128, 0.16);
+	}
+
+	.safari__url {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		height: 1.9rem;
+		padding: 0 0.7rem;
+		border-radius: 0.5rem;
+		background-color: rgba(120, 120, 128, 0.14);
+		font-size: 0.8125rem;
+		color: var(--color-label-2);
+		overflow: hidden;
+		white-space: nowrap;
 	}
 
 	.dark .safari__search {
@@ -864,6 +912,11 @@
 		height: auto;
 		background-color: #fff;
 		display: block;
+	}
+
+	/** The preview is a PDF page, so invert it in the dark theme to match the shell. */
+	.dark .resume__canvas {
+		filter: invert(1) hue-rotate(180deg);
 	}
 
 	/* ---------- Text + image viewers ---------- */
