@@ -1,12 +1,29 @@
 import { useState } from 'preact/hooks';
 
 import { sectionData } from '../content';
+import { useWindows } from '../lib/window-context';
 
 export function Photos() {
 	const section = sectionData.gallery;
 	const [active, setActive] = useState(section?.albums[0]?.title ?? '');
+	const { open } = useWindows();
 
 	if (!section) return null;
+
+	/** A photo opens in the same viewer window the Finder uses. */
+	const openPhoto = (photo: { src: string; alt?: string }) => {
+		const name = photo.src.split('/').pop() ?? photo.alt ?? 'image';
+		open('imgfile', {
+			file: {
+				id: photo.src,
+				name,
+				icon: photo.src,
+				kind: 'file',
+				fileType: 'img',
+				imageUrl: photo.src,
+			},
+		});
+	};
 
 	return (
 		<div class='photos__body'>
@@ -33,7 +50,18 @@ export function Photos() {
 
 			<div class='photos__grid'>
 				{section.photos.map((photo) => (
-					<img key={photo.src} src={photo.src} alt={photo.alt ?? ''} loading='lazy' />
+					<img
+						key={photo.src}
+						src={photo.src}
+						alt={photo.alt ?? ''}
+						loading='lazy'
+						role='button'
+						tabIndex={0}
+						onClick={() => openPhoto(photo)}
+						onKeyDown={(event) => {
+							if (event.key === 'Enter' || event.key === ' ') openPhoto(photo);
+						}}
+					/>
 				))}
 			</div>
 		</div>

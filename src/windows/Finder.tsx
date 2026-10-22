@@ -54,6 +54,10 @@ export function Finder({
 
 	const locationId = available.includes(selected) ? selected : fallback;
 	const location = locations[locationId];
+	/** The project folder list is always shown, whichever location is being browsed. */
+	const projectsLocation = locations.work;
+	const projectFolders = (projectsLocation?.children ?? []).filter(isFolder);
+	const projectsName = projectsLocation?.name ?? 'Work';
 	const allChildren = folder ? folder.children : (location?.children ?? []);
 	// The phone's Work screens have a search field (design pages 21-22).
 	const needle = query?.trim().toLowerCase() ?? '';
@@ -167,13 +171,20 @@ export function Finder({
 					))}
 				</ul>
 
-				{children.some(isFolder) && (
+				{projectFolders.length > 0 && (
 					<>
-						<p class='sidebar__heading'>{folder ? folder.name : location.name}</p>
+						<p class='sidebar__heading'>{projectsName}</p>
 						<ul class='space-y-0.5'>
-							{children.filter(isFolder).map((node) => (
+							{projectFolders.map((node) => (
 								<li key={`side-${node.id}`}>
-									<button type='button' class='sidebar__item' onClick={() => setFolder(node)}>
+									<button
+										type='button'
+										class={`sidebar__item ${folder?.id === node.id ? 'sidebar__item--active' : ''}`}
+										onClick={() => {
+											// Opening a project keeps the Finder on the projects location.
+											if (locations.work) setSelected('work');
+											setFolder(node);
+										}}>
 										<img src={node.icon} alt='' />
 										<span class='truncate'>{node.name}</span>
 									</button>
@@ -185,11 +196,6 @@ export function Finder({
 			</aside>
 
 			<div class='finder__content' ref={contentRef} {...longPress}>
-				{folder && (
-					<button type='button' class='finder__back' onClick={() => setFolder(null)}>
-						‹ {location.name}
-					</button>
-				)}
 				{children.length > 0 ? (
 					<ul>
 						{children.map((node) => (

@@ -25,10 +25,10 @@
 		"mode": "moon"
 	},
 	"sidebar": {
-		"work": "folder",
-		"info": "info",
-		"file": "file",
-		"trash": "trash"
+		"work": "folderBlue",
+		"info": "infoBlue",
+		"file": "fileBlue",
+		"trash": "trashBlue"
 	},
 	"social": {
 		"github": "github",
